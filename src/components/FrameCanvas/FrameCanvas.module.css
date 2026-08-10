@@ -1,0 +1,13 @@
+/* src/components/FrameCanvas/FrameCanvas.module.css
+   --------------------------------------------------------------- */
+
+.bgCanvas {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    height: 100%;
+    z-index: 0;
+    background: radial-gradient(circle at center, #e94848, #121212);
+}

@@ -1,0 +1,524 @@
+/* marketplace/specimen-mint/page.module.css */
+
+.page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 0%, #f4f0ff 0%, transparent 34%),
+    #fbfbfd;
+  color: #111827;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.header {
+  height: 88px;
+  padding: 0 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eef0f5;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 18px;
+  letter-spacing: 0.28em;
+  font-weight: 700;
+}
+
+.logo {
+  font-size: 22px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.balance,
+.avatar,
+.menu,
+.howButton,
+.quantityControls button {
+  border: 1px solid #ececf4;
+  background: #ffffff;
+  color: #111827;
+}
+
+.balance {
+  padding: 13px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: 0 14px 30px rgba(126, 104, 232, 0.09);
+}
+
+.avatar,
+.menu {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+}
+
+.menu {
+  font-size: 20px;
+}
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 52px 32px 42px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 54px;
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: #8b72ea;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+
+.subtitle {
+  margin: 20px 0 16px;
+  color: #7b8191;
+  font-size: 17px;
+}
+
+.howButton {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  color: #6b7280;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ledgerWrap {
+  overflow: hidden;
+}
+
+.ledger {
+  display: flex;
+  gap: 36px;
+  overflow-x: auto;
+  padding: 20px 4px 28px;
+  scroll-snap-type: x mandatory;
+}
+
+.ledger::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  min-width: 190px;
+  scroll-snap-align: start;
+}
+
+.position {
+  margin: 0 0 12px;
+  color: #8b72ea;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.imageBox {
+  height: 250px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #eef3ef;
+  box-shadow: 0 18px 40px rgba(31, 41, 55, 0.08);
+}
+
+.imageBox img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardBody {
+  padding: 18px 14px 0;
+}
+
+.cardBody h3 {
+  margin: 0 0 10px;
+  font-size: 19px;
+}
+
+.classPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: #eef7ff;
+  color: #364152;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.activeCard {
+  padding: 8px;
+  border-radius: 24px;
+  border: 4px solid rgba(150, 125, 238, 0.45);
+  box-shadow: 0 28px 55px rgba(126, 104, 232, 0.18);
+}
+
+.scrollHint {
+  width: min(780px, 80%);
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #7c8497;
+  font-size: 26px;
+}
+
+.scrollLine {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: #e5e7ee;
+  overflow: hidden;
+}
+
+.scrollLine i {
+  display: block;
+  width: 90px;
+  height: 100%;
+  background: #9a7cf2;
+  border-radius: inherit;
+}
+
+.controls {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.quantityBox {
+  height: 74px;
+  margin: 0 auto 14px;
+  padding: 0 22px;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #e9eaf2;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 16px 42px rgba(31, 41, 55, 0.05);
+}
+
+.quantityBox span {
+  color: #374151;
+  font-weight: 700;
+}
+
+.quantityControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quantityControls button,
+.quantityControls strong {
+  width: 52px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+}
+
+.quantityControls button {
+  color: #8b72ea;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.quantityControls strong {
+  border: 1px solid #ececf4;
+  background: #fff;
+}
+
+.mintButton {
+  width: 100%;
+  height: 94px;
+  padding: 0 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  border-radius: 999px;
+  color: white;
+  background: linear-gradient(135deg, #9c7cf0, #816ee8);
+  box-shadow: 0 28px 60px rgba(126, 104, 232, 0.28);
+  font-size: 28px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.mintButton span:last-child {
+  font-size: 17px;
+}
+
+.note {
+  margin: 18px 0 0;
+  color: #8a90a0;
+}
+
+.trustBar {
+  margin-top: 50px;
+  padding: 26px 32px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 22px;
+  align-items: center;
+  border: 1px solid #eceef6;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(31, 41, 55, 0.05);
+}
+
+.shield {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #8b72ea;
+  border: 2px solid #d8cdfa;
+}
+
+.trustBar p {
+  margin: 0;
+  color: #374151;
+  font-weight: 600;
+}
+
+.explorerLink {
+  color: #8b72ea;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(17, 24, 39, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.modal {
+  position: relative;
+  width: min(480px, calc(100vw - 32px));
+  padding: 32px;
+  border-radius: 28px;
+  background: #ffffff;
+  text-align: left;
+  box-shadow: 0 40px 100px rgba(17, 24, 39, 0.2);
+}
+
+.modal h2 {
+  margin: 0 0 20px;
+  font-size: 28px;
+}
+
+.steps {
+  display: grid;
+  gap: 14px;
+  color: #4b5563;
+}
+
+.steps p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.closeButton {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #ececf4;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+/* ── Nav modal (MinterHeader hamburger) ───────────────────── */
+.navModal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: navFadeIn 0.2s ease;
+}
+
+@keyframes navFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.navModalHome {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.2s ease;
+  line-height: 0;
+}
+
+.navModalHome:hover { color: #fff; }
+
+.navModalClose {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.navModalClose:hover { color: #fff; }
+
+.navModalNav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+.navModalLink {
+  font-size: 2.2rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.navModalLink:hover { color: #fff; }
+
+.navModalActive {
+  color: #9a7cf2;
+}
+
+@media (max-width: 720px) {
+  .header {
+    height: 76px;
+    padding: 0 20px;
+  }
+
+  .brand span:last-child,
+  .avatar {
+    display: none;
+  }
+
+  .balance {
+    padding: 10px 18px;
+  }
+
+  .shell {
+    padding: 38px 18px 28px;
+  }
+
+  .hero {
+    margin-bottom: 34px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .subtitle {
+    max-width: 260px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+  }
+
+  .ledger {
+    gap: 22px;
+    padding-left: 2px;
+  }
+
+  .card {
+    min-width: 150px;
+  }
+
+  .imageBox {
+    height: 190px;
+    border-radius: 15px;
+  }
+
+  .cardBody {
+    padding: 14px 8px 0;
+  }
+
+  .cardBody h3 {
+    font-size: 16px;
+  }
+
+  .classPill {
+    font-size: 11px;
+  }
+
+  .quantityBox {
+    height: 64px;
+    padding: 0 14px;
+  }
+
+  .quantityControls button,
+  .quantityControls strong {
+    width: 42px;
+    height: 38px;
+  }
+
+  .mintButton {
+    height: 84px;
+    padding: 0 28px;
+    font-size: 23px;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mintButton span:last-child {
+    font-size: 14px;
+  }
+
+  .trustBar {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+    padding: 26px 20px;
+  }
+}

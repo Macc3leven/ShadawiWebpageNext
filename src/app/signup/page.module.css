@@ -1,0 +1,286 @@
+/* ── Page shell ──────────────────────────────────────────── */
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px var(--mainPadding) 60px;
+    background: radial-gradient(ellipse at 50% 20%, rgba(20, 15, 52, 1) 0%, #07050e 65%);
+    position: relative;
+}
+
+/* Subtle CSS star field (no JS needed) */
+.bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image:
+        radial-gradient(1px 1px at 12% 22%, rgba(200,190,255,0.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 28% 65%, rgba(200,190,255,0.25) 0%, transparent 100%),
+        radial-gradient(1px 1px at 44% 18%, rgba(200,190,255,0.3)  0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 80%, rgba(200,190,255,0.2)  0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 40%, rgba(200,190,255,0.3)  0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 14%, rgba(200,190,255,0.2)  0%, transparent 100%),
+        radial-gradient(1px 1px at 6%  55%, rgba(200,190,255,0.25) 0%, transparent 100%),
+        radial-gradient(1px 1px at 52% 48%, rgba(200,190,255,0.15) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 72%, rgba(200,190,255,0.2)  0%, transparent 100%);
+    pointer-events: none;
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+.card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.07) 0%,
+        rgba(200, 205, 240, 0.04) 50%,
+        rgba(160, 165, 210, 0.06) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 44px 40px 40px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── Logo ────────────────────────────────────────────────── */
+.logo {
+    font-family: 'Apex', sans-serif;
+    font-weight: bold;
+    font-size: 0.85rem;
+    letter-spacing: 5px;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    text-align: center;
+}
+
+/* ── Mode tabs ───────────────────────────────────────────── */
+.tabs {
+    display: flex;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.tab {
+    flex: 1;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Apex', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 0;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.tab:hover { color: rgba(255, 255, 255, 0.75); }
+
+.tabActive {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.09);
+}
+
+/* ── Step dots ───────────────────────────────────────────── */
+.progress {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: background 0.25s ease;
+}
+
+.dotActive { background: var(--theme1); }
+
+/* ── Form ────────────────────────────────────────────────── */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.label {
+    font-family: 'Apex', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: -4px;
+}
+
+.input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #fff;
+    padding: 13px 16px;
+    font-family: 'Apex', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.input::placeholder { color: rgba(255, 255, 255, 0.25); }
+.input:focus {
+    border-color: rgba(255, 255, 255, 0.38);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.inputLocked {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* ── OTP row ─────────────────────────────────────────────── */
+.otpRow {
+    display: flex;
+    gap: 9px;
+    justify-content: center;
+    margin: 4px 0;
+}
+
+.otpBox {
+    width: 46px;
+    height: 54px;
+    text-align: center;
+    font-family: 'Apex', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.otpBox:focus { border-color: rgba(255, 255, 255, 0.45); }
+
+/* ── Hint text ───────────────────────────────────────────── */
+.hint {
+    font-family: 'Apex', sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.45);
+    text-align: center;
+    margin: 0;
+    letter-spacing: 0.3px;
+}
+
+.hint strong { color: rgba(255, 255, 255, 0.8); font-weight: normal; }
+
+/* ── Wallet section ──────────────────────────────────────── */
+.walletSection {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 4px 0;
+}
+
+.walletLabel {
+    font-family: 'Apex', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0;
+}
+
+.walletLabel span { color: rgba(255, 255, 255, 0.25); text-transform: none; letter-spacing: 0; }
+
+.walletBtn {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 7px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Apex', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.walletBtn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+/* ── Primary CTA button ──────────────────────────────────── */
+.cta {
+    background: var(--theme1);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Apex', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 14px 0;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 6px;
+    transition: opacity 0.2s ease;
+}
+
+.cta:hover { opacity: 0.88; }
+.cta:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── Ghost / secondary action ────────────────────────────── */
+.ghost {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.35);
+    font-family: 'Apex', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    padding: 0;
+}
+
+.ghost:hover { color: rgba(255, 255, 255, 0.7); }
+
+/* ── Error ───────────────────────────────────────────────── */
+.error {
+    font-family: 'Apex', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    color: var(--theme1);
+    text-align: center;
+    margin: 0;
+    padding: 8px 12px;
+    background: rgba(222, 105, 105, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(222, 105, 105, 0.25);
+}
+
+/* ── Mobile ──────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .card { padding: 36px 24px 32px; }
+    .otpBox { width: 40px; height: 48px; font-size: 1.2rem; }
+}

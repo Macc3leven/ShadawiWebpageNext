@@ -1,0 +1,31 @@
+/* src/components/Button/Button.module.css
+   --------------------------------------------------------------- */
+
+.button1 {
+    /* Reset for the case where this renders as an <a> tag */
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+
+    position: relative;
+    color: #fff;
+    background: linear-gradient(90deg, #ffffff31, #ffffff1e);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 4px;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 100%);
+    border: none;
+    padding: 15px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: padding 0.3s ease;
+    font-family: 'Apex', sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    min-width: max-content;
+}
+
+.button1:hover {
+    padding-right: 30px;
+    padding-left: 30px;
+}

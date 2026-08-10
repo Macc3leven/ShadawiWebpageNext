@@ -1,0 +1,142 @@
+.root {
+  position: relative;
+}
+
+/* ── Trigger button ─────────────────────────────────────────────────────── */
+.btn {
+  padding: 13px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.connected {
+  border: 1px solid #ececf4;
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 14px 30px rgba(126, 104, 232, 0.09);
+}
+.connected:hover {
+  box-shadow: 0 16px 36px rgba(126, 104, 232, 0.18);
+}
+
+.disconnected {
+  border: 1px solid rgba(139, 114, 234, 0.35);
+  background: rgba(139, 114, 234, 0.07);
+  color: #8b72ea;
+}
+.disconnected:hover {
+  background: rgba(139, 114, 234, 0.14);
+}
+
+/* ── Shared dropdown card ───────────────────────────────────────────────── */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 300;
+  min-width: 224px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid #eef0f5;
+  box-shadow: 0 20px 50px rgba(17, 24, 39, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: dropIn 0.15s ease;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Not-connected: connector list ─────────────────────────────────────── */
+.dropLabel {
+  margin: 0 0 2px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.connectorBtn {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid #ececf4;
+  background: #fafafa;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.connectorBtn:hover {
+  background: #f4f0ff;
+  border-color: #d8cdfa;
+}
+.connectorBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Connected: info rows ───────────────────────────────────────────────── */
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.infoLabel {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.infoValue {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+  font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+}
+
+.networkBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #eef0f5;
+  margin: 2px 0;
+}
+
+.disconnectBtn {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #fee2e2;
+  background: #fff5f5;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.disconnectBtn:hover {
+  background: #fee2e2;
+}

@@ -1,0 +1,91 @@
+/* src/sections/Hero/Hero.module.css
+   --------------------------------------------------------------- */
+
+.heroContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.heroNote {
+    color: rgba(255, 255, 255, 0.35);
+    font-family: 'Apex', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    margin: 12px 0 4px;
+    max-width: 360px;
+}
+
+.heroStats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+}
+
+.label {
+    font-weight: bold;
+    color: #ffb347;
+    margin-bottom: 5px;
+}
+
+.value {
+    font-size: 2rem;
+    font-weight: normal;
+    color: #fff;
+}
+
+.scrollText {
+    position: absolute;
+    font-size: x-small;
+    right: var(--mainPadding);
+    bottom: var(--mainPadding);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.scrollText span {
+    display: inline-block;
+    animation: pulse 1.4s ease-in-out infinite;
+    transform-origin: center;
+}
+
+/* 🧠 Sequential delays for the wave effect.
+   We use nth-child to stagger the animation. */
+.scrollText span:nth-child(1) { animation-delay: 0s; }
+.scrollText span:nth-child(2) { animation-delay: 0.1s; }
+.scrollText span:nth-child(3) { animation-delay: 0.2s; }
+.scrollText span:nth-child(4) { animation-delay: 0.3s; }
+.scrollText span:nth-child(5) { animation-delay: 0.4s; }
+.scrollText span:nth-child(6) { animation-delay: 0.5s; }
+.scrollText span:nth-child(8) { animation-delay: 0.6s; }
+.scrollText span:nth-child(9) { animation-delay: 0.7s; }
+.scrollText span:nth-child(10) { animation-delay: 0.8s; }
+.scrollText span:nth-child(11) { animation-delay: 0.9s; }
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50%      { transform: scale(1.6); opacity: 1; }
+}
+
+@media (max-width: 400px) {
+    .scrollText {
+        right: 5px;
+        top: 5px;
+        bottom: auto;
+    }
+    .heroStats { display: none; }
+}
+
+@media (min-width: 401px) and (max-width: 768px) {
+    .heroStats { display: none; }
+}

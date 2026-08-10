@@ -1,0 +1,69 @@
+/* src/sections/sections.module.css
+   ---------------------------------------------------------------
+   🧠 Shared section styles. Imported by every section component.
+   Your old code had `body > section` and `section > .content` rules
+   that applied to ALL sections at once. We replicate that here by
+   sharing a CSS module across the section components.
+   
+   Tip: in CSS modules, multiple files can import from the same
+   module — you're not duplicating CSS, just re-using class names.
+   --------------------------------------------------------------- */
+
+.section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    min-height: max-content;
+    box-sizing: border-box;
+    color: #fff;
+    font-family: 'Apex', sans-serif;
+    z-index: 1;
+}
+
+.content {
+    min-height: 100vh;
+    width: 100%;
+    padding: var(--mainPadding);
+    box-sizing: border-box;
+}
+
+.title {
+    font-size: 96px;
+    font-weight: bold;
+    line-height: 1;
+    letter-spacing: 1px;
+    color: var(--theme2);
+    margin: 0;
+    text-transform: uppercase;
+    max-width: 700px;
+    margin-top: auto;
+}
+
+.subtitle {
+    font-size: 14px;
+    max-width: 400px;
+    letter-spacing: 1px;
+    font-weight: lighter;
+    color: #ffffff;
+}
+
+/* Right-aligned variant for sections 2 and 3 */
+.alignRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+@media (max-width: 400px) {
+    .title { font-size: 40px; }
+    .subtitle { font-size: 12px; }
+}
+
+@media (min-width: 401px) and (max-width: 768px) {
+    .title {
+        font-size: 10vw;
+        max-width: 90vw;
+    }
+}

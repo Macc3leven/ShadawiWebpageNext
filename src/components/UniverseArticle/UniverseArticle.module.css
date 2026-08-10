@@ -1,0 +1,184 @@
+/* ── Wrapper ──────────────────────────────────────────────── */
+.article {
+    position: relative;
+    min-height: 100vh;
+    font-family: 'Apex', sans-serif;
+    color: #fff;
+}
+
+/* ── Image zone ───────────────────────────────────────────── */
+.imageZone {
+    position: relative;
+    z-index: 1;
+    height: 54vh;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.breadcrumb {
+    position: absolute;
+    top: 80px; /* clears the navbar */
+    left: var(--mainPadding);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+}
+
+.crumbLink {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.crumbLink:hover { color: #fff; }
+
+.crumbSep {
+    color: rgba(124, 95, 230, 0.6);
+    font-size: 0.9rem;
+}
+
+.crumbCurrent {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Actual article image (when provided) */
+.heroImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+/* Gradient that fades the image zone into the content zone */
+.imageGradient {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 40%,
+        rgba(5, 3, 14, 0.6) 75%,
+        rgba(5, 3, 14, 1) 100%
+    );
+    pointer-events: none;
+}
+
+/* ── Content zone ─────────────────────────────────────────── */
+.contentZone {
+    position: relative;
+    z-index: 1;
+    background: rgba(5, 3, 14, 0.98);
+    border-top: 1px solid rgba(124, 95, 230, 0.25);
+}
+
+.inner {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 60px 100px;
+}
+
+/* ── Title ────────────────────────────────────────────────── */
+.title {
+    font-weight: bold;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 16px;
+    line-height: 1.1;
+}
+
+.divider {
+    width: 40px;
+    height: 1px;
+    background: rgba(124, 95, 230, 0.55);
+    margin-bottom: 36px;
+}
+
+/* ── Body text ────────────────────────────────────────────── */
+.body { display: flex; flex-direction: column; gap: 20px; }
+
+.para {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+    font-weight: lighter;
+    letter-spacing: 0.3px;
+}
+
+/* ── Pagination ───────────────────────────────────────────── */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 64px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pageBtn {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.pageBtn:hover:not(:disabled) {
+    border-color: rgba(124, 95, 230, 0.6);
+    color: #fff;
+}
+
+.pageBtn:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .imageZone {
+        height: 42vh;
+        min-height: 260px;
+    }
+
+    .inner {
+        padding: 44px var(--mainPadding) 80px;
+    }
+
+    .title {
+        font-size: clamp(1.5rem, 8vw, 2rem);
+        letter-spacing: 5px;
+    }
+
+    .para { font-size: 0.85rem; line-height: 1.8; }
+}

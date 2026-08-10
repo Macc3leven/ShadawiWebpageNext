@@ -1,0 +1,22 @@
+/* src/app/page.module.css
+   ---------------------------------------------------------------
+   🧠 CSS MODULES LESSON
+   Files named *.module.css are SCOPED. You import them like JS:
+       import styles from './page.module.css';
+   Then use them via the styles object:
+       <div className={styles.paddedDiv} />
+   
+   Behind the scenes Next.js renames `.paddedDiv` to something like
+   `.page_paddedDiv__a8x9k` so it can never collide with another
+   class of the same name anywhere else. You write normal CSS,
+   you get free scoping.
+   
+   Note: in HTML/CSS you used `padded-div` (kebab-case).
+   In CSS Modules you'll find camelCase is easier because of
+   `styles.paddedDiv`. Both work — `styles['padded-div']` is fine
+   too, just uglier.
+   --------------------------------------------------------------- */
+
+.paddedDiv {
+    height: 20vh;
+}
