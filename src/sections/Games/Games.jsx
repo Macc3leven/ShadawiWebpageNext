@@ -7,7 +7,7 @@ const LINKS = [
   {
     title: "Shadawi Striker",
     description: "Battle with your specimens.",
-    href: "/games",
+    href: "/games/shadawi-striker",
     image: "/images/specimen-temp/domigra.png",
   },
   {

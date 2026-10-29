@@ -9,6 +9,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 18px var(--mainPadding);
+    /* soft fade so scrolling content doesn't collide with the links */
+    background: linear-gradient(rgba(10, 12, 16, 0.85), rgba(10, 12, 16, 0));
 }
 
 .logo {

@@ -1,0 +1,465 @@
+/* games/shadawi-striker/page.module.css
+   Landing page for Shadawi Striker. Same visual language as the
+   homepage and minter: dark sky, coral accents, glass panels. */
+
+.page {
+  min-height: 100vh;
+  background: #0f1217;
+  color: #fff;
+  font-family: var(--font-main);
+  overflow: hidden;
+}
+
+/* ── Shared type ────────────────────────────────────────────── */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 36px;
+  height: 2px;
+  background: var(--coral);
+}
+
+.sectionHeader {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  margin: 0;
+  max-width: 760px;
+  font-size: clamp(30px, 3.6vw, 52px);
+  font-weight: 800;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.body {
+  margin: 0 0 14px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.emphasis {
+  margin: 0 0 16px;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--coral);
+}
+
+.callout {
+  margin: 18px 0 0;
+  padding: 14px 18px;
+  border-left: 2px solid var(--coral);
+  background: rgba(242, 88, 78, 0.08);
+  border-radius: 0 8px 8px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #fff;
+}
+
+.note {
+  margin: 14px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.subheading {
+  margin: 56px 0 20px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(var(--navHeight) + 24px) clamp(20px, 5vw, 72px) 64px;
+  background:
+    linear-gradient(90deg, rgba(12, 15, 20, 0.92) 0%, rgba(12, 15, 20, 0.55) 45%, rgba(12, 15, 20, 0.1) 100%),
+    linear-gradient(0deg, #0f1217 0%, rgba(15, 18, 23, 0) 30%),
+    var(--hero-image) center / cover;
+}
+
+.heroInner {
+  width: 100%;
+  max-width: var(--sectionMax);
+  margin: 0 auto;
+}
+
+.heroTitle {
+  margin: 0 0 18px;
+  font-size: clamp(48px, 7vw, 112px);
+  font-weight: 800;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.heroTitle span {
+  color: var(--coral);
+}
+
+.tagline {
+  margin: 0 0 22px;
+  font-size: clamp(18px, 1.6vw, 24px);
+  font-weight: 600;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  margin-bottom: 24px;
+}
+
+.launchBadge {
+  padding: 7px 14px;
+  border: 1px solid var(--coral);
+  border-radius: 4px;
+  background: rgba(242, 88, 78, 0.14);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.platforms {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lead {
+  max-width: 560px;
+  margin: 0;
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.heroActions {
+  margin-top: 32px;
+}
+
+/* ── Sections ───────────────────────────────────────────────── */
+.section {
+  max-width: var(--sectionMax);
+  margin: 0 auto;
+  padding: 96px clamp(20px, 5vw, 72px) 24px;
+  box-sizing: content-box;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.media {
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+}
+
+.media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+/* ── Combat features ────────────────────────────────────────── */
+.features {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature {
+  padding: 24px 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.feature:hover {
+  border-color: rgba(242, 88, 78, 0.5);
+  transform: translateY(-2px);
+}
+
+.featureIcon {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 16px;
+  color: var(--coral);
+}
+
+.feature h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.feature p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ── Game modes ─────────────────────────────────────────────── */
+.modes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.mode {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.modeImage {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background-color: #1a1f28;
+  background-size: cover;
+  background-position: center 30%;
+}
+
+.modeImage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(15, 18, 23, 0.9), rgba(15, 18, 23, 0) 60%);
+}
+
+.modeTag {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  z-index: 1;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--coral);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.modeBody {
+  padding: 22px 22px 26px;
+}
+
+.modeName {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--coral);
+}
+
+.modeHeadline {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.modeTagline {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ── Collection collage ─────────────────────────────────────── */
+.collage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.collageTile {
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background-color: #1a1f28;
+  background-size: cover;
+  background-position: center 30%;
+}
+
+.collageTile:nth-child(2),
+.collageTile:nth-child(4) {
+  transform: translateY(28px);
+}
+
+/* ── Platforms ──────────────────────────────────────────────── */
+.intro {
+  max-width: 640px;
+  margin-bottom: 28px;
+}
+
+.platformGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.platformCard {
+  padding: 28px 28px 30px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+}
+
+.platformWide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 32px;
+  background:
+    linear-gradient(90deg, rgba(242, 88, 78, 0.1), rgba(242, 88, 78, 0)),
+    rgba(255, 255, 255, 0.04);
+}
+
+.platformList {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.platformList li {
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* ── Road to launch ─────────────────────────────────────────── */
+.launch {
+  margin-top: 96px;
+  padding: 120px clamp(20px, 5vw, 72px);
+  background:
+    linear-gradient(rgba(15, 18, 23, 1) 0%, rgba(15, 18, 23, 0.7) 30%, rgba(15, 18, 23, 0.85) 100%),
+    var(--launch-image) center / cover;
+  text-align: center;
+}
+
+.launchInner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.launchInner .eyebrow {
+  justify-content: center;
+}
+
+.launchTitle {
+  margin: 0 0 24px;
+  font-size: clamp(56px, 9vw, 128px);
+  font-weight: 800;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.launchTitle span {
+  color: var(--coral);
+}
+
+.launchActions {
+  margin: 32px 0 16px;
+}
+
+.launchSub {
+  margin: 0 0 32px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.finePrint {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .modes { grid-template-columns: minmax(0, 1fr); }
+
+  .mode {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  }
+
+  .modeImage { aspect-ratio: auto; min-height: 220px; }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 110px; /* clears the mobile pill menu */
+    align-items: flex-end;
+    background:
+      linear-gradient(0deg, #0f1217 10%, rgba(15, 18, 23, 0.55) 60%, rgba(15, 18, 23, 0.3) 100%),
+      var(--hero-image) center / cover;
+  }
+
+  .section { padding-top: 72px; }
+
+  .split { grid-template-columns: minmax(0, 1fr); }
+
+  .mode { display: flex; }
+  .modeImage { aspect-ratio: 16 / 10; min-height: 0; }
+
+  .platformGrid { grid-template-columns: minmax(0, 1fr); }
+
+  .platformWide { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+
+  .platformList { flex-wrap: wrap; }
+
+  .launch { padding: 88px 20px; margin-top: 72px; }
+}
+
+@media (max-width: 480px) {
+  .features { grid-template-columns: minmax(0, 1fr); }
+}

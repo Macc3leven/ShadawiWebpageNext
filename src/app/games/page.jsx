@@ -8,7 +8,7 @@ const CARDS = [
     title: "Shadawi Striker",
     description: "Shadawi Striker is a real-time 3D fighting game where mages build teams of powerful specimens, battle opponents, and earn new creatures through skill-based combat.",
     accentColor: "#7c5fe6",
-    href: "#",
+    href: "/games/shadawi-striker",
     icon: (
       <svg viewBox="0 0 42 42" fill="none" stroke="currentColor" strokeWidth="1.4" width="42" height="42">
         <circle cx="21" cy="21" r="17" />
