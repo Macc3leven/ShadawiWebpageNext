@@ -12,6 +12,7 @@
 //   - onClick:  a function to run when clicked
 //   - type:     "button" | "submit" | "reset"  (defaults to "button")
 //   - href:     if provided, renders an <a> instead (for navigation)
+//   - variant:  "glass" (default) | "primary" (solid coral + arrow) | "link" (underlined text)
 //   - ...rest:  any other props get spread onto the element
 //
 // 🧠 The `...rest` spread is a "props pass-through" pattern.
@@ -27,12 +28,23 @@ export default function Button({
   onClick,
   type = "button",
   href,
+  variant = "glass",
   className = "",
   ...rest
 }) {
   // 🧠 We combine our scoped class with any extra className the
   // caller passed in. The space between them matters!
-  const combinedClass = `${styles.button1} ${className}`.trim();
+  const variantClass = { glass: styles.button1, primary: styles.primary, link: styles.link }[variant];
+  const combinedClass = `${variantClass} ${className}`.trim();
+
+  if (variant === "primary") {
+    children = (
+      <>
+        {children}
+        <span className={styles.arrow} aria-hidden="true">→</span>
+      </>
+    );
+  }
 
   // 🧠 If href is provided, render a Next.js <Link> instead of <button>.
   // <Link> does client-side navigation — no full page reload, much faster.

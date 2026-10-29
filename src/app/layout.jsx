@@ -15,8 +15,17 @@
 // ---------------------------------------------------------------
 
 import "@/styles/globals.css";
-import ConditionalNavbar from "@/components/Navbar/ConditionalNavbar";
+import { Exo_2 } from "next/font/google";
+import Navbar from "@/components/Navbar/Navbar";
 import WalletProvider from "@/providers/WalletProvider";
+
+// Exo 2 — closest Google font to the mockups. Bold for titles, normal for body.
+const exo = Exo_2({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-exo",
+  display: "swap",
+});
 
 export const metadata = {
   title: "Shadawi — Reserve a Specimen",
@@ -26,10 +35,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={exo.variable}>
       <body>
         <WalletProvider>
-          <ConditionalNavbar />
+          <Navbar />
           {children}
         </WalletProvider>
       </body>

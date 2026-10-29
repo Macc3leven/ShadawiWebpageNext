@@ -5,7 +5,7 @@
 }
 
 .heading {
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
     font-weight: normal;
     font-size: 1rem;
     letter-spacing: 3px;

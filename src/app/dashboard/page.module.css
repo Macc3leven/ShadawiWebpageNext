@@ -31,7 +31,7 @@
 }
 
 .characterBadge {
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
     font-size: 0.62rem;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -50,7 +50,7 @@
 }
 
 .greeting {
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
     font-size: 0.68rem;
     letter-spacing: 4px;
     color: var(--theme1);
@@ -59,7 +59,7 @@
 }
 
 .name {
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
     font-size: 1.8rem;
     font-weight: bold;
     letter-spacing: 6px;
@@ -69,12 +69,12 @@
 }
 
 .sub {
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
     font-size: 0.75rem;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.35);
     margin: 0;
-    font-weight: lighter;
+    font-weight: normal;
 }
 
 /* ── Stat row ────────────────────────────────────────────── */
@@ -97,14 +97,14 @@
 }
 
 .statValue {
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
     font-size: 1.6rem;
     font-weight: bold;
     color: rgba(255, 255, 255, 0.6);
 }
 
 .statLabel {
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
     font-size: 0.58rem;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -112,7 +112,7 @@
 }
 
 .comingSoon {
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
     font-size: 0.65rem;
     letter-spacing: 2px;
     color: rgba(255, 255, 255, 0.18);

@@ -2,52 +2,46 @@ import Button from "@/components/Button/Button";
 import shared from "@/sections/sections.module.css";
 import styles from "./Hero.module.css";
 
-const SCROLL_LETTERS   = ["S", "C", "R", "O", "L", "L"];
-const SCROLL_LETTERS_2 = ["D", "O", "W", "N"];
+const STATS = [
+  { value: "345", label: "Members" },
+  { value: "998", label: "Existing Specimen" },
+];
 
 export default function Hero() {
   return (
     <section className={shared.section}>
-      <div className={`${shared.content} ${styles.heroContent}`}>
-        <h1 className={shared.title}>
-          JOIN THE<br />GALACTIC<br />BATTLE
-        </h1>
+      <div className={shared.content}>
+        <div className={shared.column}>
+          <p className={shared.eyebrow}>A living sci-fi fantasy universe</p>
 
-        <p className={shared.subtitle}>
-          Shadawi is a living sci-fi fantasy universe of mages, specimens, and battles 
-          across dimensions. The balance between 
-          mage society and specimen kingdoms are beginning to fracture. 
-          You enter this world as a mage, follow the 
-          stories, and prepare for what comes next.
-        </p>
+          <h1 className={`${shared.title} ${shared.titleLight}`}>
+            Join the<br />Galactic<br /><span className={shared.accent}>Battle</span>
+          </h1>
 
-        <Button href="/universe">ENTER</Button>
+          <p className={shared.subtitle}>
+            Shadawi is home to eight realms, powerful mages, and a growing
+            collection of extraordinary specimens.
+          </p>
+          <p className={shared.subtitle}>
+            Create your mage profile, earn rewards, configure your specimens, and
+            connect with mages around the world. Level up, earn badges, and climb
+            the global owner rankings.
+          </p>
 
-        <small className={styles.heroNote}>
-          Receive transmissions, configure specimen, playable updates, and early
-          access notices.
-        </small>
-
-        <div className={styles.heroStats}>
-          <div className={styles.stat}>
-            <span className={styles.label}>MEMBERS</span>
-            <span className={styles.value}>345</span>
+          <div className={shared.actions}>
+            <Button href="/universe" variant="primary">Enter</Button>
+            <Button href="#specimens" variant="link">Learn more</Button>
           </div>
-          <div className={styles.stat}>
-            <span className={styles.label}>EXISTING SPECIMEN</span>
-            <span className={styles.value}>998</span>
+
+          <div className={styles.stats}>
+            {STATS.map((stat) => (
+              <div key={stat.label} className={styles.stat}>
+                <span className={styles.value}>{stat.value}</span>
+                <span className={styles.label}>{stat.label}</span>
+              </div>
+            ))}
           </div>
         </div>
-
-        <h1 className={styles.scrollText}>
-          {SCROLL_LETTERS.map((letter, i) => (
-            <span key={`top-${i}`}>{letter}</span>
-          ))}
-          <br />
-          {SCROLL_LETTERS_2.map((letter, i) => (
-            <span key={`bot-${i}`}>{letter}</span>
-          ))}
-        </h1>
       </div>
     </section>
   );

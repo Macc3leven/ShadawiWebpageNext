@@ -25,11 +25,11 @@ const SOCIAL_LINKS = [
 
 export default function Connect() {
   return (
-    <section className={shared.section} style={{ height: "max-content" }}>
-      <div className={`${shared.content} ${styles.fourthContent}`}>
-        <h1 className={`${shared.title} ${styles.footerTitle}`}>
+    <section className={styles.footer}>
+      <div className={styles.fourthContent}>
+        <h2 className={`${shared.title} ${styles.footerTitle}`}>
           CONNECT<br />ACROSS THE<br />REALMS
-        </h1>
+        </h2>
         <p className={shared.subtitle}>
           FOLLOW US ON OUR SOCIAL MEDIA — EMAIL AUTHENTICATION
           <br />

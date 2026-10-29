@@ -15,32 +15,9 @@
 
 /* ====================
    FONTS
-   Note: font files now live in /public/fonts/ — Next.js serves
-   anything in /public at the root URL. So the path becomes /fonts/...
+   Exo 2 is loaded in src/app/layout.jsx via next/font/google, which
+   exposes it as --font-exo. Titles use bold (700/800), paragraphs normal (400).
    ==================== */
-@font-face {
-    font-family: 'Apex';
-    src: url('/fonts/ApexMk2-Regular.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Apex';
-    src: url('/fonts/ApexMk2-BoldExtended.otf') format('opentype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Apex';
-    src: url('/fonts/ApexMk2-LightCondensed.otf') format('opentype');
-    font-weight: lighter;
-    font-style: normal;
-    font-display: swap;
-}
 
 
 /* ====================
@@ -53,6 +30,10 @@
     --theme3: #ffc037;
     --corner: 12px;
     --mainPadding: 26px;
+    --font-main: var(--font-exo), 'Segoe UI', sans-serif;
+    --coral: #f2584e;
+    --sectionMax: 1320px;
+    --navHeight: 72px;
 }
 
 
@@ -68,7 +49,7 @@ html, body {
     padding: 0;
     width: 100%;
     overflow-x: hidden;
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
     background: #121212; /* fallback before canvas loads */
     color: #fff;
 }

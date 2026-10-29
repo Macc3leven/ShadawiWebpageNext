@@ -3,7 +3,7 @@
     position: relative;
     min-height: 100vh;
     color: #fff;
-    font-family: 'Apex', sans-serif;
+    font-family: var(--font-main);
 }
 
 /* ── Two-column layout (desktop) ─────────────────────────── */
@@ -57,7 +57,7 @@
     margin: 0 0 28px;
     max-width: 300px;
     letter-spacing: 0.4px;
-    font-weight: lighter;
+    font-weight: normal;
 }
 
 .accentLabel {
@@ -163,7 +163,7 @@
     line-height: 1.65;
     color: rgba(255, 255, 255, 0.45);
     margin: 0;
-    font-weight: lighter;
+    font-weight: normal;
 }
 
 .cardArrow {

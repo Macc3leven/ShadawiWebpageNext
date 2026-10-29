@@ -1,26 +1,31 @@
-// components/MinterHero.jsx
 "use client";
 
-import { useState } from "react";
 import styles from "@/app/marketplace/specimen-mint/page.module.css";
-import HowItWorksModal from "./HowItWorksModal";
 
 export default function MinterHero() {
-  const [open, setOpen] = useState(false);
+  // Opens the How It Works panel (collapsible on mobile) and scrolls to it
+  function showHowItWorks() {
+    const panel = document.getElementById("how-it-works");
+    if (!panel) return;
+    panel.open = true;
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   return (
-    <section className={styles.hero}>
-      <p className={styles.eyebrow}>SPECIMEN MINTER</p>
-      <h1>Mint the next specimen</h1>
+    <div className={styles.hero}>
+      <p className={styles.eyebrow}>Specimen mint</p>
+      <h1 className={styles.title}>
+        Mint the<br /><span>next specimen</span>
+      </h1>
       <p className={styles.subtitle}>
-        Transparent. Community-driven. No surprises.
+        Get the next specimen in the queue.<br />
+        Your mint adds a new one to the end.
       </p>
 
-      <button className={styles.howButton} onClick={() => setOpen(true)}>
-        ⓘ How it works
+      <button className={styles.howButton} onClick={showHowItWorks}>
+        <span className={styles.playIcon} aria-hidden="true" />
+        How it works
       </button>
-
-      {open && <HowItWorksModal onClose={() => setOpen(false)} />}
-    </section>
+    </div>
   );
 }

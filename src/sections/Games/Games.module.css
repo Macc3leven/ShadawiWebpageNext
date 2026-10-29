@@ -1,0 +1,75 @@
+/* src/sections/Games/Games.module.css
+   Link rows from the Play mockup: thumbnail · title/description · arrow
+   --------------------------------------------------------------- */
+
+.list {
+    list-style: none;
+    margin: 26px 0 0;
+    padding: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    text-shadow: none;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 140px 1fr 40px;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    color: #fff;
+    text-decoration: none;
+}
+
+.thumb {
+    height: 84px;
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.35);
+    background-size: cover;
+    background-position: center 35%;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.rowTitle {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.rowDesc {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.arrow {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: 16px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.row:hover .arrow {
+    background: var(--coral);
+    transform: translateX(3px);
+}
+
+@media (max-width: 480px) {
+    .row {
+        grid-template-columns: 96px 1fr 36px;
+        gap: 14px;
+    }
+
+    .thumb { height: 64px; }
+    .arrow { width: 36px; height: 36px; }
+    .rowTitle { font-size: 14px; }
+}
