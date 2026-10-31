@@ -5,7 +5,7 @@ import { walletConnect, injected, coinbaseWallet } from 'wagmi/connectors'
 // ---------------------------------------------------------------------------
 // Single wagmi config for the entire app.
 //
-// - Marketplace pages   → useWriteContract / useSendTransaction
+// - Shop pages          → useWriteContract / useSendTransaction
 // - Account-setup pages → useSignMessage / useSignTypedData
 //
 // Both use this same config — the hooks handle the behavioural difference.

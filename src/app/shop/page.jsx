@@ -1,6 +1,6 @@
 import PortalTemplate from "@/components/PortalTemplate/PortalTemplate";
 
-export const metadata = { title: "Marketplace — Shadawi" };
+export const metadata = { title: "Shop — Shadawi" };
 
 const CARDS = [
   {
@@ -8,7 +8,7 @@ const CARDS = [
     title: "Specimen Minter",
     description: "Browse, bid, and acquire rare Shadawi from across the universe.",
     accentColor: "#7c5fe6",
-    href: "/marketplace/specimen-mint",
+    href: "/shop/specimen-mint",
     icon: (
       <svg viewBox="0 0 42 42" fill="none" stroke="currentColor" strokeWidth="1.4" width="42" height="42">
         <path d="M21 3L39 21L21 39L3 21Z" />
@@ -22,7 +22,7 @@ const CARDS = [
     title: "Gem Minter",
     description: "Discover and acquire powerful gems to enhance your specimens and mages.",
     accentColor: "#c8921a",
-    href: "/marketplace/gem-mint",
+    href: "/shop/gem-mint",
     icon: (
       <svg viewBox="0 0 42 42" fill="none" stroke="currentColor" strokeWidth="1.4" width="42" height="42">
         <path d="M21 6L36 14.5V27.5L21 36L6 27.5V14.5Z" />
@@ -63,10 +63,10 @@ const CARDS = [
   // },
 ];
 
-export default function MarketplacePage() {
+export default function ShopPage() {
   return (
     <PortalTemplate
-      title="Marketplace"
+      title="Shop"
       subtitle="Trade specimens, artifacts, and essence across the realms. Every transaction shapes the balance."
       accentLabel="Browse Listings"
       cards={CARDS}

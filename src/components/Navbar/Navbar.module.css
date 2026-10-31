@@ -61,8 +61,9 @@
 .cta.active { color: var(--theme1); }
 
 
-/* ── Mobile pill button ───────────────────────────────────── */
-.pill {
+/* ── Mobile pill button (homepage) + corner bar (other pages) ── */
+.pill,
+.mobileBar {
     display: none;
 }
 
@@ -97,6 +98,47 @@
         height: 2px;
         background: #fff;
         border-radius: 2px;
+    }
+
+    /* Slim header for every page except the homepage */
+    .mobileBar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 12px 16px;
+        background: linear-gradient(rgba(10, 12, 16, 0.85), rgba(10, 12, 16, 0));
+    }
+
+    .cornerBtn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .cornerBtn:hover {
+        background: rgba(255, 255, 255, 0.14);
+        border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .cornerBtn .bar {
+        width: 18px;
     }
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/app/marketplace/specimen-mint/page.module.css";
+import styles from "@/app/shop/specimen-mint/page.module.css";
 
 export default function MinterHero() {
   // Opens the How It Works panel (collapsible on mobile) and scrolls to it

@@ -1,4 +1,4 @@
-import styles from "@/app/marketplace/specimen-mint/page.module.css";
+import styles from "@/app/shop/specimen-mint/page.module.css";
 import WalletButton from "@/components/WalletButton/WalletButton";
 
 // Mint limit is a placeholder until it's read from the contract

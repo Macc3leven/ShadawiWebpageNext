@@ -1,4 +1,5 @@
 import Button from "@/components/Button/Button";
+import SupportButton from "@/components/SupportButton/SupportButton";
 import styles from "./page.module.css";
 
 export const metadata = {
@@ -114,6 +115,7 @@ export default function ShadawiStrikerPage() {
 
           <div className={styles.heroActions}>
             <Button href="/signup" variant="primary">Create your Mage account</Button>
+            <SupportButton />
           </div>
         </div>
       </section>
@@ -285,6 +287,7 @@ export default function ShadawiStrikerPage() {
           </p>
           <div className={styles.launchActions}>
             <Button href="/signup" variant="primary">Join Shadawi</Button>
+            <SupportButton />
           </div>
           <p className={styles.launchSub}>
             Create your Mage account and follow the development of Shadawi Striker.

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import styles from "@/app/marketplace/specimen-mint/page.module.css";
+import styles from "@/app/shop/specimen-mint/page.module.css";
 import SpecimenCard from "./SpecimenCard";
 
 // Desktop shows all 10 in a row. Narrower screens scroll the track

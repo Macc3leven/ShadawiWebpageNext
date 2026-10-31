@@ -48,7 +48,8 @@ html, body {
     margin: 0;
     padding: 0;
     width: 100%;
-    overflow-x: hidden;
+    overflow-x: hidden; /* fallback for older browsers */
+    overflow-x: clip;   /* hides sideways overflow without breaking position: sticky */
     font-family: var(--font-main);
     background: #121212; /* fallback before canvas loads */
     color: #fff;

@@ -63,6 +63,11 @@
     transform: translateX(3px);
 }
 
+.support {
+    margin-top: 22px;
+    text-shadow: none;
+}
+
 @media (max-width: 480px) {
     .row {
         grid-template-columns: 96px 1fr 36px;

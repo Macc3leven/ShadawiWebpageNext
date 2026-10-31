@@ -17,7 +17,8 @@
 import "@/styles/globals.css";
 import { Exo_2 } from "next/font/google";
 import Navbar from "@/components/Navbar/Navbar";
-import WalletProvider from "@/providers/WalletProvider";
+// WalletProvider is NOT loaded here on purpose — the wallet libraries are huge.
+// Pages that need a wallet wrap themselves in it (see app/shop/specimen-mint/layout.jsx).
 
 // Exo 2 — closest Google font to the mockups. Bold for titles, normal for body.
 const exo = Exo_2({
@@ -37,10 +38,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={exo.variable}>
       <body>
-        <WalletProvider>
-          <Navbar />
-          {children}
-        </WalletProvider>
+        <Navbar />
+        {children}
       </body>
     </html>
   );

@@ -14,6 +14,7 @@
 // ---------------------------------------------------------------
 
 import shared from "@/sections/sections.module.css";
+import SupportButton from "@/components/SupportButton/SupportButton";
 import styles from "./Connect.module.css";
 
 const SOCIAL_LINKS = [
@@ -48,6 +49,10 @@ export default function Connect() {
               <img src={link.icon} alt={link.alt} />
             </a>
           ))}
+        </div>
+
+        <div className={styles.support}>
+          <SupportButton />
         </div>
 
         <div className={styles.termsContainer}>

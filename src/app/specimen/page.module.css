@@ -224,6 +224,146 @@
   letter-spacing: 2px;
 }
 
+/* Bits that only appear in the mobile layout below */
+.titleExtra { display: none; }
+.searchIcon { display: none; }
+.filterBtn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* Desktop: stick just below the fixed navbar (~55px tall) */
+@media (min-width: 768px) {
+    .filterBar { top: 56px; }
+    /* keep the original all-caps desktop labels */
+    .tab,
+    .filterLabel { text-transform: uppercase; }
+}
+
+/* ============================================================
+   MOBILE HEADER + FILTER BAR (compact — gets cards on screen sooner)
+   Desktop keeps the original look above.
+   ============================================================ */
+@media (max-width: 767px) {
+    .header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        text-align: left;
+        padding: 72px 10px 14px; /* clears the mobile header */
+    }
+
+    .bigTitle {
+        margin: 0 0 4px;
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: 0;
+        text-transform: none;
+    }
+
+    .titleExtra { display: inline; }
+
+    .subtitle {
+        margin: 0;
+        max-width: none;
+        font-size: 0.9rem;
+        letter-spacing: 0;
+        opacity: 0.65;
+    }
+
+    .docsLink {
+        flex-shrink: 0;
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    /* Sticks just below the mobile header */
+    .filterBar {
+        top: 62px;
+        padding: 0 10px;
+    }
+
+    .filterInner {
+        display: grid;
+        gap: 10px;
+        padding: 8px 0 6px;
+    }
+
+    /* Segmented control */
+    .tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        height: auto;
+        padding: 4px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+    }
+
+    .tabs .tab {
+        padding: 10px 0;
+        border: none;
+        border-radius: 9px;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0;
+    }
+
+    .tabs .tabActive {
+        background: rgba(255, 255, 255, 0.14);
+        color: #fff;
+    }
+
+    /* Search + square filter button */
+    .searchRow {
+        max-width: none;
+        margin: 0; /* old auto margins stop it stretching full width */
+        height: 46px;
+        padding: 0;
+        gap: 10px;
+        background: none;
+        border: none;
+        border-radius: 0;
+    }
+
+    .searchWrap { position: relative; }
+
+    .searchIcon {
+        display: block;
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        width: 18px;
+        height: 18px;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.55);
+        pointer-events: none;
+    }
+
+    .searchInput {
+        padding: 0 14px 0 42px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        font-size: 0.95rem;
+        letter-spacing: 0;
+    }
+
+    .filterBtn {
+        justify-content: center;
+        width: 46px;
+        padding: 0;
+        border-color: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+    }
+
+    .filterBtn svg { width: 20px; height: 20px; }
+
+    .filterLabel { display: none; }
+}
+
+
 /* ============================================================
    CARD GRID
    ============================================================ */
@@ -480,21 +620,56 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Hero zone */
+/* Hero zone — square on mobile so the whole specimen shows */
 .modalHero {
   position: relative;
-  min-height: 280px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   overflow: hidden;
+  background: #14161c;
+  flex-shrink: 0;
 }
 
+@media (min-width: 768px) {
+  .modalHero {
+    aspect-ratio: auto;
+    height: min(500px, 58vh);
+  }
+}
+
+/* Blurred, darkened copy of the image fills any leftover space */
+.modalHeroBackdrop {
+  position: absolute;
+  inset: -40px;
+  width: calc(100% + 80px);
+  height: calc(100% + 80px);
+  object-fit: cover;
+  filter: blur(28px) brightness(0.6);
+  pointer-events: none;
+}
+
+/* The specimen itself — never cropped */
 .modalHeroImg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   pointer-events: none;
-  opacity: 0.9;
+}
+
+/* Dark fades top and bottom so the title and form switcher stay readable */
+.modalHero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(rgba(8, 10, 14, 0.78) 0%, rgba(8, 10, 14, 0) 34%),
+    linear-gradient(0deg, rgba(8, 10, 14, 0.7) 0%, rgba(8, 10, 14, 0) 26%);
+  pointer-events: none;
 }
 
 .modalHeader {
@@ -511,20 +686,20 @@
 .modalTitle {
   font-size: clamp(1.4rem, 5vw, 2rem);
   margin: 0;
-  color: #111;
+  color: #fff;
   letter-spacing: 2px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
 }
 
 .modalSubtitle {
   font-size: 0.82rem;
   letter-spacing: 1px;
-  opacity: 0.7;
   margin: 5px 0 0;
-  color: #2a2a40;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .modalClassTag {
-  color: #5a3da0;
+  color: #c2b0ff;
   font-weight: bold;
 }
 
@@ -538,97 +713,168 @@
   height: 36px;
   border-radius: 10px;
   border: none;
-  background: rgba(255,255,255,0.55);
-  color: #333;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
   font-size: 18px;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-.iconBtn:hover { background: rgba(255,255,255,0.85); }
+.iconBtn:hover { background: rgba(0, 0, 0, 0.65); }
 
-/* Form switcher */
-.formSwitcher {
+/* Bottom bar over the image: View in 3D + form switcher */
+.heroBottom {
   position: relative;
   z-index: 2;
-  padding: 12px 20px 14px;
-  text-align: left;
-}
-
-.formLabel {
-  font-size: 0.65rem;
-  letter-spacing: 2px;
-  font-weight: bold;
-  color: #444;
-  margin: 0 0 6px;
-}
-
-.formDots {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 6px;
-}
-
-.formDot {
-  width: 24px;
-  height: 5px;
-  border-radius: 3px;
-  background: rgba(0,0,0,0.15);
-  transition: background 0.2s;
-}
-
-.formDotActive { background: #667eea; }
-
-.formArrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(255,255,255,0.52);
-  backdrop-filter: blur(8px);
-  color: #333;
-  font-size: 20px;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-}
-
-.formArrow:hover { background: rgba(255,255,255,0.82); }
-.formPrev { left: 12px; }
-.formNext { right: 12px; }
-
-.modalCta {
-  position: relative;
-  z-index: 2;
-  padding: 8px 20px 16px;
-  text-align: left;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 16px 34px; /* leaves room for the tab bar tucking over the image */
 }
 
 .ctaBtn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 20px;
   border: none;
-  border-radius: 10px;
-  padding: 10px 22px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.35);
+  color: #fff;
   font-family: var(--font-main);
   font-size: 0.82rem;
-  letter-spacing: 1px;
   font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
   cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Modal tabs */
-.modalTabs {
+.ctaBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(102, 126, 234, 0.5);
+}
+
+.ctaBtn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Compact form pill: ‹  ALPHA 1/4  › */
+.formPill {
   display: flex;
-  border-top: 1px solid rgba(255,255,255,0.3);
-  border-bottom: 1px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.15);
+  align-items: center;
+  min-width: 0;
+  height: 44px;
+  padding: 0 2px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(10, 12, 18, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+}
+
+.formPillInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 0 6px;
+  font-size: 0.72rem;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* No arrows (single form) — give the text some breathing room */
+.formPill > .formPillInfo:only-child {
+  padding: 0 14px;
+}
+
+.formPillName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 11ch;
+}
+
+.formPillCount {
+  color: rgba(255, 255, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 40px round tap targets for thumbs */
+.formPillArrow {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.formPillArrow:hover,
+.formPillArrow:active {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Narrow phones: pill fills the rest of the row with tighter tracking
+   so full stage names fit (arrows keep their 40px tap targets) */
+@media (max-width: 420px) {
+  .ctaBtn {
+    flex-shrink: 0;
+    gap: 8px;
+    padding: 0 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .formPill {
+    flex: 1 1 auto;
+    justify-content: space-between;
+  }
+
+  .formPillInfo {
+    padding: 0 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .formPillName { max-width: none; }
+}
+
+@media (max-width: 360px) {
+  .ctaBtn { padding: 0 14px; }
+}
+
+
+/* Modal tabs */
+/* Rounded "sheet" top that tucks over the bottom of the image */
+.modalTabs {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-shrink: 0; /* overflow:hidden would otherwise let the scrolling modal squash it */
+  margin-top: -18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-bottom-color: rgba(255,255,255,0.3);
+  border-radius: 18px 18px 0 0;
+  background: rgba(214, 208, 240, 0.62);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .modalTab {

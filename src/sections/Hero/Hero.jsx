@@ -5,6 +5,7 @@ import styles from "./Hero.module.css";
 const STATS = [
   { value: "345", label: "Members" },
   { value: "998", label: "Existing Specimen" },
+  { value: "∞", label: "Endless Possibilities", symbol: true },
 ];
 
 export default function Hero() {
@@ -15,28 +16,35 @@ export default function Hero() {
           <p className={shared.eyebrow}>A living sci-fi fantasy universe</p>
 
           <h1 className={`${shared.title} ${shared.titleLight}`}>
-            Join the<br />Galactic<br /><span className={shared.accent}>Battle</span>
+            Join the
+            <br />
+            Galactic
+            <br />
+            <span className={shared.accent}>Battle</span>
           </h1>
 
           <p className={shared.subtitle}>
-            Shadawi is home to eight realms, powerful mages, and a growing
-            collection of extraordinary specimens.
+            One Mage account connects you across all Shadawi titles. 
           </p>
           <p className={shared.subtitle}>
-            Create your mage profile, earn rewards, configure your specimens, and
-            connect with mages around the world. Level up, earn badges, and climb
-            the global owner rankings.
+            Create your Mage profile and connect with mages around the world.
+            Manage your specimens, earn rewards and badges, and climb the global
+            owner rankings as you level up.
           </p>
 
           <div className={shared.actions}>
-            <Button href="/universe" variant="primary">Enter</Button>
-            <Button href="#specimens" variant="link">Learn more</Button>
+            <Button href="/signup" variant="primary">
+              Create your Mage
+            </Button>
+            <Button href="#specimens" variant="link">
+              Learn more
+            </Button>
           </div>
 
           <div className={styles.stats}>
             {STATS.map((stat) => (
               <div key={stat.label} className={styles.stat}>
-                <span className={styles.value}>{stat.value}</span>
+                <span className={`${styles.value} ${stat.symbol ? styles.symbol : ""}`}>{stat.value}</span>
                 <span className={styles.label}>{stat.label}</span>
               </div>
             ))}

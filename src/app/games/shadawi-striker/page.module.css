@@ -158,6 +158,10 @@
 }
 
 .heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 16px;
   margin-top: 32px;
 }
 
@@ -407,6 +411,10 @@
 }
 
 .launchActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 16px;
   margin: 32px 0 16px;
 }
 
@@ -437,7 +445,7 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding-top: 110px; /* clears the mobile pill menu */
+    padding-top: 84px; /* clears the mobile header */
     align-items: flex-end;
     background:
       linear-gradient(0deg, #0f1217 10%, rgba(15, 18, 23, 0.55) 60%, rgba(15, 18, 23, 0.3) 100%),

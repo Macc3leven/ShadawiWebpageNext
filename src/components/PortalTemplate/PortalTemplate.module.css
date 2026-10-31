@@ -177,9 +177,11 @@
 /* ── Mobile layout ───────────────────────────────────────── */
 @media (max-width: 768px) {
     .layout {
-        grid-template-columns: 1fr;
+        /* minmax(0, …) stops a wide title from stretching the column past the screen */
+        grid-template-columns: minmax(0, 1fr);
         align-items: start;
-        padding-top: 80px;
+        align-content: start; /* don't spread the rows across the full screen height */
+        padding-top: 66px;
     }
 
     .hero {
@@ -188,9 +190,10 @@
     }
 
     .title {
-        font-size: clamp(2.6rem, 13vw, 3.8rem);
-        letter-spacing: 8px;
+        font-size: clamp(2.4rem, 11vw, 3.4rem);
+        letter-spacing: 4px;
         margin-bottom: 14px;
+        overflow-wrap: anywhere;
     }
 
     .subtitle {
@@ -199,7 +202,7 @@
     }
 
     .cardsArea {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         padding: 0 var(--mainPadding) 70px;
         gap: 11px;
     }

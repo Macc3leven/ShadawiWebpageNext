@@ -1,0 +1,65 @@
+/* Outlined coral button — pairs with the solid primary Button */
+.outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 22px;
+    border: 1px solid rgba(242, 88, 78, 0.6);
+    border-radius: 4px;
+    background: rgba(242, 88, 78, 0.08);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #fff;
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-shadow: none;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.outline:hover {
+    border-color: var(--coral);
+    background: rgba(242, 88, 78, 0.18);
+    transform: translateY(-1px);
+}
+
+/* Small inline text link (footer, fine print) */
+.link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.link:hover {
+    color: var(--coral);
+}
+
+.outline svg,
+.link svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--coral);
+    transition: transform 0.2s ease;
+}
+
+.outline:hover svg,
+.link:hover svg {
+    transform: scale(1.15) rotate(-6deg);
+}
+
+.external {
+    font-size: 13px;
+    opacity: 0.7;
+}

@@ -8,6 +8,17 @@
 const nextConfig = {
   reactStrictMode: true, // Helps catch bugs during development (runs effects twice on purpose - don't be alarmed)
 
+  // Marketplace was renamed to Shop — keep old links working
+  async redirects() {
+    return [
+      { source: "/marketplace", destination: "/shop", permanent: true },
+      { source: "/marketplace/:path*", destination: "/shop/:path*", permanent: true },
+      // Only one game for now — send the games hub straight to it.
+      // Temporary (307) so browsers don't cache it if the hub comes back.
+      { source: "/games", destination: "/games/shadawi-striker", permanent: false },
+    ];
+  },
+
   webpack(config) {
     // wagmi's connector barrel exports every connector, including experimental
     // ones we don't use. Stub out their missing peer deps so the build doesn't fail.

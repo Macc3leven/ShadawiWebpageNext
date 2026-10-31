@@ -11,8 +11,8 @@ const isLoggedIn = false;
 const NAV_LINKS = [
   { label: "Universe", href: "/universe" },
   { label: "Specimen", href: "/specimen" },
-  { label: "Games", href: "/games" },
-  { label: "Marketplace", href: "/marketplace" },
+  { label: "Games", href: "/games/shadawi-striker" }, // only one game for now — skip the hub
+  { label: "Shop", href: "/shop" },
   { label: isLoggedIn ? "Dashboard" : "Sign Up", href: isLoggedIn ? "/dashboard" : "/signup" },
 ];
 
@@ -48,16 +48,31 @@ export default function Navbar() {
         </ul>
       </nav>
 
-      {/* ── Mobile pill button ── */}
-      <button
-        className={styles.pill}
-        onClick={() => setMenuOpen(true)}
-        aria-label="Open menu"
-      >
-        <span className={styles.bar} />
-        <span className={styles.bar} />
-        <span className={styles.bar} />
-      </button>
+      {/* ── Mobile: big pill on the homepage, slim logo + corner button everywhere else ── */}
+      {pathname === "/" ? (
+        <button
+          className={styles.pill}
+          onClick={() => setMenuOpen(true)}
+          aria-label="Open menu"
+        >
+          <span className={styles.bar} />
+          <span className={styles.bar} />
+          <span className={styles.bar} />
+        </button>
+      ) : (
+        <div className={styles.mobileBar}>
+          <Link href="/" className={styles.logo}>SHADAWI</Link>
+          <button
+            className={styles.cornerBtn}
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+          >
+            <span className={styles.bar} />
+            <span className={styles.bar} />
+            <span className={styles.bar} />
+          </button>
+        </div>
+      )}
 
       {/* ── Fullscreen mobile modal ── */}
       {menuOpen && (

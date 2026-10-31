@@ -1,4 +1,4 @@
-/* marketplace/specimen-mint/page.module.css
+/* shop/specimen-mint/page.module.css
    Layout follows the Specimen Mint mockup: hero + mint panel on top,
    the 10-card queue, then the 3-step process. Glass panels over the
    red-planet scene. */
@@ -494,7 +494,7 @@
 
 @media (max-width: 768px) {
   .page {
-    padding-top: 110px; /* clears the mobile pill menu */
+    padding-top: 84px; /* clears the mobile header */
   }
 
   .desktopOnly,

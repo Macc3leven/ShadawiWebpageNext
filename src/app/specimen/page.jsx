@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import PortalCanvas from "@/components/PortalCanvas/PortalCanvas";
+import { formStageName, specimenFormTitle } from "@/lib/specimenForms";
 import styles from "./page.module.css";
 
 // ============================================================
@@ -14,7 +15,7 @@ const SPECIMEN = [
     description: "Puny purgator, bring me to the fight. I have walked through countless battlefields, my essence sharpened by every soul I've reaped.",
     creator: "oneiric",
     mugshot: "/images/specimen-temp/domigra.png",
-    forms: [{ name: "Domigra", image: "/images/specimen-temp/domigra.png" }],
+    forms: [{ image: "/images/specimen-temp/domigra.png" }],
     currentForm: 0,
     attributes: [
       { name: "PurgLvl", value: "Supermighty" },
@@ -38,7 +39,7 @@ const SPECIMEN = [
     metrics: {
       population: { cap: 1000, totalMinted: 721, totalBurned: 38, growth: "+12/cycle" },
       ownership:  { uniqueOwners: 412, longestHolder: "186 days", researchTokens: 14 },
-      lineage:    { totalForms: 1, supplyPerForm: "721", rarestForm: "Base", popularForm: "Base" },
+      lineage:    { totalForms: 1, supplyPerForm: "721", rarestForm: "Alpha", popularForm: "Alpha" },
       battle:     { usageRate: "34%", victories: 1842, damageDealt: "4.2M", winRate: "61%", highestStat: "Health (80)", lowestStat: "Speed (40)", powerIndex: 712 },
       blockchain: { openseaUrl: "https://opensea.io" },
     },
@@ -49,10 +50,10 @@ const SPECIMEN = [
     creator: "oneiric",
     mugshot: "/images/specimen-temp/mightybird.png",
     forms: [
-      { name: "Chinon", image: "/images/specimen-temp/mightybird.png" },
-      { name: "Skyborn", image: "/images/specimen-temp/mightybird.png" },
-      { name: "Celestial", image: "/images/specimen-temp/mightybird.png" },
-      { name: "Ascended", image: "/images/specimen-temp/mightybird.png" },
+      { image: "/images/specimen-temp/mightybird.png" },
+      { image: "/images/specimen-temp/mightybird.png" },
+      { image: "/images/specimen-temp/mightybird.png" },
+      { image: "/images/specimen-temp/mightybird.png" },
     ],
     currentForm: 0,
     attributes: [
@@ -77,7 +78,7 @@ const SPECIMEN = [
     metrics: {
       population: { cap: 5000, totalMinted: 2021, totalBurned: 102, growth: "+45/cycle" },
       ownership:  { uniqueOwners: 1340, longestHolder: "301 days", researchTokens: 67 },
-      lineage:    { totalForms: 4, supplyPerForm: "~505", rarestForm: "Ascended", popularForm: "Chinon" },
+      lineage:    { totalForms: 4, supplyPerForm: "~505", rarestForm: "Delta", popularForm: "Alpha" },
       battle:     { usageRate: "52%", victories: 5210, damageDealt: "18.7M", winRate: "74%", highestStat: "Health (92)", lowestStat: "Speed (55)", powerIndex: 921 },
       blockchain: { openseaUrl: "https://opensea.io" },
     },
@@ -88,9 +89,9 @@ const SPECIMEN = [
     creator: "oneiric",
     mugshot: "/images/specimen-temp/cloudogre.png",
     forms: [
-      { name: "Jejar", image: "/images/specimen-temp/cloudogre.png" },
-      { name: "Ogrekin", image: "/images/specimen-temp/cloudogre.png" },
-      { name: "Stormform", image: "/images/specimen-temp/cloudogre.png" },
+      { image: "/images/specimen-temp/cloudogre.png" },
+      { image: "/images/specimen-temp/cloudogre.png" },
+      { image: "/images/specimen-temp/cloudogre.png" },
     ],
     currentForm: 0,
     attributes: [
@@ -114,7 +115,7 @@ const SPECIMEN = [
     metrics: {
       population: { cap: 2000, totalMinted: 721, totalBurned: 15, growth: "+8/cycle" },
       ownership:  { uniqueOwners: 389, longestHolder: "142 days", researchTokens: 9 },
-      lineage:    { totalForms: 3, supplyPerForm: "~240", rarestForm: "Stormform", popularForm: "Jejar" },
+      lineage:    { totalForms: 3, supplyPerForm: "~240", rarestForm: "Gamma", popularForm: "Alpha" },
       battle:     { usageRate: "28%", victories: 980, damageDealt: "3.1M", winRate: "54%", highestStat: "Health (84)", lowestStat: "Speed (38)", powerIndex: 648 },
       blockchain: { openseaUrl: "https://opensea.io" },
     },
@@ -124,7 +125,7 @@ const SPECIMEN = [
     description: "Seapunk was once a peaceful spirit of the wind, guiding ships safely through the fog. His life changed when a shipwrecked mage bound him to a cursed plank of driftwood.",
     creator: "oneiric",
     mugshot: "/images/specimen-temp/seapuk.png",
-    forms: [{ name: "Seapunk", image: "/images/specimen-temp/seapuk.png" }],
+    forms: [{ image: "/images/specimen-temp/seapuk.png" }],
     currentForm: 0,
     attributes: [
       { name: "PurgLvl", value: "Weak" },
@@ -146,7 +147,7 @@ const SPECIMEN = [
     metrics: {
       population: { cap: 5000, totalMinted: 3001, totalBurned: 204, growth: "+31/cycle" },
       ownership:  { uniqueOwners: 2104, longestHolder: "88 days", researchTokens: 3 },
-      lineage:    { totalForms: 1, supplyPerForm: "3001", rarestForm: "Base", popularForm: "Base" },
+      lineage:    { totalForms: 1, supplyPerForm: "3001", rarestForm: "Alpha", popularForm: "Alpha" },
       battle:     { usageRate: "18%", victories: 420, damageDealt: "890K", winRate: "41%", highestStat: "Speed (70)", lowestStat: "Recovery (35)", powerIndex: 388 },
       blockchain: { openseaUrl: "https://opensea.io" },
     },
@@ -157,9 +158,9 @@ const SPECIMEN = [
     creator: "shadawi",
     mugshot: "/images/specimen-temp/domigra.png",
     forms: [
-      { name: "Veynar", image: "/images/specimen-temp/domigra.png" },
-      { name: "Tempestborn", image: "/images/specimen-temp/domigra.png" },
-      { name: "Stormking", image: "/images/specimen-temp/domigra.png" },
+      { image: "/images/specimen-temp/domigra.png" },
+      { image: "/images/specimen-temp/domigra.png" },
+      { image: "/images/specimen-temp/domigra.png" },
     ],
     currentForm: 1,
     attributes: [
@@ -182,7 +183,7 @@ const SPECIMEN = [
     metrics: {
       population: { cap: 3000, totalMinted: 1455, totalBurned: 61, growth: "+19/cycle" },
       ownership:  { uniqueOwners: 820, longestHolder: "210 days", researchTokens: 22 },
-      lineage:    { totalForms: 3, supplyPerForm: "~485", rarestForm: "Stormking", popularForm: "Veynar" },
+      lineage:    { totalForms: 3, supplyPerForm: "~485", rarestForm: "Gamma", popularForm: "Alpha" },
       battle:     { usageRate: "40%", victories: 2890, damageDealt: "9.4M", winRate: "68%", highestStat: "Essence (95)", lowestStat: "Recovery (50)", powerIndex: 834 },
       blockchain: { openseaUrl: "https://opensea.io" },
     },
@@ -193,8 +194,8 @@ const SPECIMEN = [
     creator: "shadawi",
     mugshot: "/images/specimen-temp/mightybird.png",
     forms: [
-      { name: "Bramblekin", image: "/images/specimen-temp/mightybird.png" },
-      { name: "Thornbloom", image: "/images/specimen-temp/mightybird.png" },
+      { image: "/images/specimen-temp/mightybird.png" },
+      { image: "/images/specimen-temp/mightybird.png" },
     ],
     currentForm: 0,
     attributes: [
@@ -218,7 +219,7 @@ const SPECIMEN = [
     metrics: {
       population: { cap: 4000, totalMinted: 1800, totalBurned: 45, growth: "+22/cycle" },
       ownership:  { uniqueOwners: 990, longestHolder: "175 days", researchTokens: 31 },
-      lineage:    { totalForms: 2, supplyPerForm: "~900", rarestForm: "Thornbloom", popularForm: "Bramblekin" },
+      lineage:    { totalForms: 2, supplyPerForm: "~900", rarestForm: "Beta", popularForm: "Alpha" },
       battle:     { usageRate: "22%", victories: 680, damageDealt: "1.8M", winRate: "48%", highestStat: "Recovery (88)", lowestStat: "Speed (45)", powerIndex: 502 },
       blockchain: { openseaUrl: "https://opensea.io" },
     },
@@ -230,7 +231,7 @@ const TOKENS = [
     sid: "T-001", name: "Phoenix Crest", className: "divine",
     description: "A sacred token forged from the ashes of the first Phoenix to grace the Shadawi skies. Grants its bearer one revival per cycle.",
     mugshot: "/images/specimen-temp/mightybird.png",
-    forms: [{ name: "Phoenix Crest", image: "/images/specimen-temp/mightybird.png" }],
+    forms: [{ image: "/images/specimen-temp/mightybird.png" }],
     currentForm: 0,
     attributes: [
       { name: "Rarity", value: "Legendary" },
@@ -250,7 +251,7 @@ const TOKENS = [
     sid: "T-002", name: "Stormcaller", className: "elemental",
     description: "A focusing crystal that channels storm energy directly into a bound specimen.",
     mugshot: "/images/specimen-temp/cloudogre.png",
-    forms: [{ name: "Stormcaller", image: "/images/specimen-temp/cloudogre.png" }],
+    forms: [{ image: "/images/specimen-temp/cloudogre.png" }],
     currentForm: 0,
     attributes: [
       { name: "Rarity", value: "Epic" },
@@ -270,7 +271,7 @@ const TOKENS = [
     sid: "T-003", name: "Bone Sigil", className: "undead",
     description: "An etched fragment of an ancient ribcage, humming with low purgatory energy.",
     mugshot: "/images/specimen-temp/domigra.png",
-    forms: [{ name: "Bone Sigil", image: "/images/specimen-temp/domigra.png" }],
+    forms: [{ image: "/images/specimen-temp/domigra.png" }],
     currentForm: 0,
     attributes: [
       { name: "Rarity", value: "Rare" },
@@ -290,7 +291,7 @@ const TOKENS = [
     sid: "T-004", name: "Tide Cipher", className: "gas",
     description: "A waterproof scroll-token that lets a specimen breathe in any medium for one full cycle.",
     mugshot: "/images/specimen-temp/seapuk.png",
-    forms: [{ name: "Tide Cipher", image: "/images/specimen-temp/seapuk.png" }],
+    forms: [{ image: "/images/specimen-temp/seapuk.png" }],
     currentForm: 0,
     attributes: [
       { name: "Rarity", value: "Uncommon" },
@@ -422,9 +423,11 @@ export default function SpecimenPage() {
   useEffect(() => {
     const el = filterRef.current;
     if (!el) return;
+    // Match the bar's CSS `top` (0 on desktop, below the menu pill on mobile)
+    const stickyTop = parseFloat(getComputedStyle(el).top) || 0;
     const observer = new IntersectionObserver(
       ([entry]) => setStuck(!entry.isIntersecting),
-      { threshold: 1, rootMargin: "-1px 0px 0px 0px" }
+      { threshold: 1, rootMargin: `-${stickyTop + 1}px 0px 0px 0px` }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -482,6 +485,23 @@ export default function SpecimenPage() {
     setModalTab("overview");
   };
 
+  // Step through forms, wrapping around at either end
+  const formCount = specimenModal?.forms?.length || 0;
+  const changeForm = (delta) => {
+    if (formCount < 2) return;
+    setFormIndex((f) => (f + delta + formCount) % formCount);
+  };
+
+  // Swipe left/right on the hero image to change form
+  const swipeStartX = useRef(null);
+  const onHeroTouchStart = (e) => { swipeStartX.current = e.touches[0].clientX; };
+  const onHeroTouchEnd = (e) => {
+    if (swipeStartX.current == null) return;
+    const dx = e.changedTouches[0].clientX - swipeStartX.current;
+    swipeStartX.current = null;
+    if (Math.abs(dx) > 40) changeForm(dx < 0 ? 1 : -1);
+  };
+
   const applyFiltersAndClose = () => {
     setFilter(pendingFilter);
     setFiltersOpen(false);
@@ -507,10 +527,13 @@ export default function SpecimenPage() {
       <PortalCanvas />
       <div className={styles.page}>
 
-        {/* Header */}
+        {/* Header — compact so the cards show up sooner */}
         <div className={styles.header}>
-          <h1 className={styles.bigTitle}>SPECIMEN</h1>
-          <p className={styles.subtitle}>Browse, discover, and acquire rare specimens from across the universe.</p>
+          <div>
+            {/* "Archive" only shows on mobile; desktop keeps the short title */}
+            <h1 className={styles.bigTitle}>Specimen<span className={styles.titleExtra}> Archive</span></h1>
+            <p className={styles.subtitle}>Browse the Shadawi collection.</p>
+          </div>
           <a href="shadawi/documentation" className={styles.docsLink}>
             Docs
           </a>
@@ -518,35 +541,48 @@ export default function SpecimenPage() {
 
         {/* Sticky Filter Bar */}
         <div ref={filterRef} className={`${styles.filterBar}${stuck ? " " + styles.stuck : ""}`}>
-          <div className={styles.tabs}>
-            {["specimen", "tokens", "owners"].map((t) => (
-              <button
-                key={t}
-                className={`${styles.tab}${activeTab === t ? " " + styles.tabActive : ""}`}
-                onClick={() => { setActiveTab(t); setSearch(""); setDebouncedSearch(""); setFilter({}); }}
-              >
-                {t.toUpperCase()}
-              </button>
-            ))}
-          </div>
-          <div className={styles.searchRow}>
-            <div className={styles.searchWrap}>
-              <input
-                className={styles.searchInput}
-                type="text"
-                placeholder={`Search ${activeTab}...`}
-                value={search}
-                onChange={handleSearchChange}
-              />
+          <div className={styles.filterInner}>
+            <div className={styles.tabs} role="tablist">
+              {[
+                { id: "specimen", label: "Specimens" },
+                { id: "tokens", label: "Tokens" },
+                { id: "owners", label: "Owners" },
+              ].map(({ id, label }) => (
+                <button
+                  key={id}
+                  role="tab"
+                  aria-selected={activeTab === id}
+                  className={`${styles.tab}${activeTab === id ? " " + styles.tabActive : ""}`}
+                  onClick={() => { setActiveTab(id); setSearch(""); setDebouncedSearch(""); setFilter({}); }}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-            <button className={styles.filterBtn} onClick={openFilters}>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <line x1="1" y1="3" x2="13" y2="3" />
-                <line x1="3" y1="7" x2="11" y2="7" />
-                <line x1="5" y1="11" x2="9" y2="11" />
-              </svg>
-              FILTERS
-            </button>
+            <div className={styles.searchRow}>
+              <div className={styles.searchWrap}>
+                <svg className={styles.searchIcon} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                  <circle cx="9" cy="9" r="6" />
+                  <path d="M13.5 13.5L17 17" />
+                </svg>
+                <input
+                  className={styles.searchInput}
+                  type="text"
+                  placeholder={activeTab === "owners" ? "Search owners..." : "Search collection..."}
+                  value={search}
+                  onChange={handleSearchChange}
+                />
+              </div>
+              <button className={styles.filterBtn} onClick={openFilters} aria-label="Filters" title="Filters">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                  <path d="M3 5H11M15 5H17M3 10H5M9 10H17M3 15H12M16 15H17" />
+                  <circle cx="13" cy="5" r="2" />
+                  <circle cx="7" cy="10" r="2" />
+                  <circle cx="14" cy="15" r="2" />
+                </svg>
+                <span className={styles.filterLabel}>Filters</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -611,20 +647,30 @@ export default function SpecimenPage() {
             <div className={styles.specimenModal} onClick={(e) => e.stopPropagation()}>
 
               {/* Hero */}
-              <div className={styles.modalHero}>
+              <div className={styles.modalHero} onTouchStart={onHeroTouchStart} onTouchEnd={onHeroTouchEnd}>
                 {specimenModal.forms?.[formIndex]?.image && (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    className={styles.modalHeroImg}
-                    src={specimenModal.forms[formIndex].image}
-                    alt={specimenModal.forms[formIndex].name}
-                  />
+                  <>
+                    {/* Blurred copy fills the space around the uncropped image */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      className={styles.modalHeroBackdrop}
+                      src={specimenModal.forms[formIndex].image}
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      className={styles.modalHeroImg}
+                      src={specimenModal.forms[formIndex].image}
+                      alt={specimenFormTitle(specimenModal.name, formIndex)}
+                    />
+                  </>
                 )}
 
                 {/* Header overlay */}
                 <div className={styles.modalHeader}>
                   <div className={styles.modalTitleBar}>
-                    <h2 className={styles.modalTitle}>{specimenModal.name}</h2>
+                    <h2 className={styles.modalTitle}>{specimenFormTitle(specimenModal.name, formIndex)}</h2>
                     <p className={styles.modalSubtitle}>
                       SID {specimenModal.sid}
                       {specimenModal.className && (
@@ -637,33 +683,32 @@ export default function SpecimenPage() {
                   </div>
                 </div>
 
-                {/* Form switcher */}
-                {specimenModal.forms?.length > 0 && (
-                  <div className={styles.formSwitcher}>
-                    <p className={styles.formLabel}>FORM — {specimenModal.forms[formIndex]?.name?.toUpperCase()}</p>
-                    <div className={styles.formDots}>
-                      {specimenModal.forms.map((_, i) => (
-                        <div
-                          key={i}
-                          className={`${styles.formDot}${i === formIndex ? " " + styles.formDotActive : ""}`}
-                          onClick={() => setFormIndex(i)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      ))}
-                    </div>
-                    {formIndex > 0 && (
-                      <button className={`${styles.formArrow} ${styles.formPrev}`} onClick={() => setFormIndex((f) => f - 1)}>‹</button>
-                    )}
-                    {formIndex < specimenModal.forms.length - 1 && (
-                      <button className={`${styles.formArrow} ${styles.formNext}`} onClick={() => setFormIndex((f) => f + 1)}>›</button>
-                    )}
-                  </div>
-                )}
-              </div>
+                {/* Bottom bar over the image: View in 3D + compact form switcher */}
+                <div className={styles.heroBottom}>
+                  <button className={styles.ctaBtn}>
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M10 2L17 6V14L10 18L3 14V6Z" />
+                      <path d="M3 6L10 10L17 6M10 10V18" />
+                    </svg>
+                    View in 3D
+                  </button>
 
-              {/* CTA */}
-              <div className={styles.modalCta}>
-                <button className={styles.ctaBtn}>VIEW IN 3D</button>
+                  {/* Forms are a specimen concept — tokens don't get the switcher */}
+                  {formCount > 0 && activeTab !== "tokens" && (
+                    <div className={styles.formPill} role="group" aria-label="Specimen form">
+                      {formCount > 1 && (
+                        <button className={styles.formPillArrow} onClick={() => changeForm(-1)} aria-label="Previous form">‹</button>
+                      )}
+                      <span className={styles.formPillInfo} aria-live="polite">
+                        <span className={styles.formPillName}>{formStageName(formIndex)}</span>
+                        <span className={styles.formPillCount}>{formIndex + 1}/{formCount}</span>
+                      </span>
+                      {formCount > 1 && (
+                        <button className={styles.formPillArrow} onClick={() => changeForm(1)} aria-label="Next form">›</button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Modal tabs */}

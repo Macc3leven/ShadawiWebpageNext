@@ -1,4 +1,4 @@
-import styles from "@/app/marketplace/specimen-mint/page.module.css";
+import styles from "@/app/shop/specimen-mint/page.module.css";
 
 // Class tag colours, one per realm
 const CLASS_COLORS = {

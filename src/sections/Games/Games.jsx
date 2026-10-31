@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SupportButton from "@/components/SupportButton/SupportButton";
 import shared from "@/sections/sections.module.css";
 import styles from "./Games.module.css";
 
@@ -13,7 +14,7 @@ const LINKS = [
   {
     title: "Specimen Minter",
     description: "Build your collection.",
-    href: "/marketplace/specimen-mint",
+    href: "/shop/specimen-mint",
     image: "/images/specimen-temp/mightybird.png",
   },
 ];
@@ -47,6 +48,10 @@ export default function Games() {
               </li>
             ))}
           </ul>
+
+          <div className={styles.support}>
+            <SupportButton variant="link" />
+          </div>
         </div>
       </div>
     </section>

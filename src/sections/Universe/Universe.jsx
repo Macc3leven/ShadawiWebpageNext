@@ -1,4 +1,4 @@
-import Button from "@/components/Button/Button";
+import VideoButton from "@/components/VideoButton/VideoButton";
 import shared from "@/sections/sections.module.css";
 
 export default function Universe() {
@@ -16,8 +16,12 @@ export default function Universe() {
             the wind, you may want to reconsider your journey.
           </p>
           <div className={shared.actions}>
-            <Button href="/specimen" variant="primary">View specimens</Button>
-            <Button href="/universe" variant="link">Explore the universe</Button>
+            {/* Any YouTube link works here (watch, youtu.be, shorts) */}
+            <VideoButton
+              url="https://www.youtube.com/watch?v=dOxDjK-PSwI"
+              poster="/images/frames/0001.png"
+              title="Some storms are alive"
+            />
           </div>
         </div>
       </div>
