@@ -17,6 +17,7 @@
 import "@/styles/globals.css";
 import { Exo_2 } from "next/font/google";
 import Navbar from "@/components/Navbar/Navbar";
+import AuthProvider from "@/providers/AuthProvider";
 // WalletProvider is NOT loaded here on purpose — the wallet libraries are huge.
 // Pages that need a wallet wrap themselves in it (see app/shop/specimen-mint/layout.jsx).
 
@@ -38,8 +39,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={exo.variable}>
       <body>
-        <Navbar />
-        {children}
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

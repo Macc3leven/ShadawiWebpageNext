@@ -3,22 +3,26 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/providers/AuthProvider";
 import styles from "./Navbar.module.css";
 
-// Swap for real auth context when auth is wired up
-const isLoggedIn = false;
-
-const NAV_LINKS = [
+const MAIN_LINKS = [
   { label: "Universe", href: "/universe" },
   { label: "Specimen", href: "/specimen" },
   { label: "Games", href: "/games/shadawi-striker" }, // only one game for now — skip the hub
   { label: "Shop", href: "/shop" },
-  { label: isLoggedIn ? "Dashboard" : "Sign Up", href: isLoggedIn ? "/dashboard" : "/signup" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { status } = useAuth();
+
+  // Last item swaps to Dashboard once signed in
+  const NAV_LINKS = [
+    ...MAIN_LINKS,
+    status === "signedIn" ? { label: "Dashboard", href: "/dashboard" } : { label: "Sign In", href: "/signup" },
+  ];
 
   // Lock body scroll while modal is open
   useEffect(() => {

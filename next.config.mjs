@@ -16,6 +16,9 @@ const nextConfig = {
       // Only one game for now — send the games hub straight to it.
       // Temporary (307) so browsers don't cache it if the hub comes back.
       { source: "/games", destination: "/games/shadawi-striker", permanent: false },
+      // One sign-in page handles both signing up and logging in — catch the addresses people type
+      { source: "/login", destination: "/signup", permanent: false },
+      { source: "/signin", destination: "/signup", permanent: false },
     ];
   },
 

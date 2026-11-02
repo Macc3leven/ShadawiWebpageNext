@@ -60,36 +60,6 @@
     text-align: center;
 }
 
-/* ── Mode tabs ───────────────────────────────────────────── */
-.tabs {
-    display: flex;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    overflow: hidden;
-}
-
-.tab {
-    flex: 1;
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.4);
-    font-family: var(--font-main);
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 10px 0;
-    cursor: pointer;
-    transition: color 0.2s ease, background 0.2s ease;
-}
-
-.tab:hover { color: rgba(255, 255, 255, 0.75); }
-
-.tabActive {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.09);
-}
-
 /* ── Step dots ───────────────────────────────────────────── */
 .progress {
     display: flex;
@@ -106,6 +76,49 @@
 }
 
 .dotActive { background: var(--theme1); }
+
+/* ── Heading ─────────────────────────────────────────────── */
+.heading {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+}
+
+.title {
+    font-family: var(--font-main);
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #fff;
+    margin: 0;
+}
+
+/* ── "or" divider + Google button ───────────────────────── */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-main);
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.googleButton {
+    display: flex;
+    justify-content: center;
+    min-height: 44px; /* reserve space while Google's button loads */
+}
 
 /* ── Form ────────────────────────────────────────────────── */
 .form {
@@ -142,11 +155,6 @@
 .input:focus {
     border-color: rgba(255, 255, 255, 0.38);
     background: rgba(255, 255, 255, 0.08);
-}
-
-.inputLocked {
-    opacity: 0.45;
-    cursor: not-allowed;
 }
 
 /* ── OTP row ─────────────────────────────────────────────── */
@@ -187,47 +195,6 @@
 
 .hint strong { color: rgba(255, 255, 255, 0.8); font-weight: normal; }
 
-/* ── Wallet section ──────────────────────────────────────── */
-.walletSection {
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 4px 0;
-}
-
-.walletLabel {
-    font-family: var(--font-main);
-    font-size: 0.68rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
-    margin: 0;
-}
-
-.walletLabel span { color: rgba(255, 255, 255, 0.25); text-transform: none; letter-spacing: 0; }
-
-.walletBtn {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 7px;
-    color: rgba(255, 255, 255, 0.7);
-    font-family: var(--font-main);
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 10px 16px;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-}
-
-.walletBtn:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-}
-
 /* ── Primary CTA button ──────────────────────────────────── */
 .cta {
     background: var(--theme1);
@@ -263,7 +230,8 @@
     padding: 0;
 }
 
-.ghost:hover { color: rgba(255, 255, 255, 0.7); }
+.ghost:hover:not(:disabled) { color: rgba(255, 255, 255, 0.7); }
+.ghost:disabled { cursor: default; opacity: 0.6; }
 
 /* ── Error ───────────────────────────────────────────────── */
 .error {

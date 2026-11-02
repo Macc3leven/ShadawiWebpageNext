@@ -119,3 +119,38 @@
     text-transform: uppercase;
     margin: 0;
 }
+
+.email {
+    font-family: var(--font-main);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.25);
+    margin: 4px 0 0;
+}
+
+.loading {
+    font-family: var(--font-main);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.signOut {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    padding: 10px 22px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: var(--font-main);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.signOut:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.35);
+}

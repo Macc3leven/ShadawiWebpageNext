@@ -1,206 +1,214 @@
 "use client";
 
-import { useState, useRef } from "react";
+// One passwordless flow for new and returning Mages:
+// email → 6-digit code → (first time only) pick a Mage name → dashboard.
+// "Continue with Google" skips straight past the code step.
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Script from "next/script";
 import { useRouter } from "next/navigation";
+import { userApi } from "@/lib/userApi";
+import { useAuth } from "@/providers/AuthProvider";
 import styles from "./page.module.css";
 
-export default function AuthPage() {
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+const RESEND_SECONDS = 60;
+const EMPTY_CODE = ["", "", "", "", "", ""];
+
+export default function SignInPage() {
   const router = useRouter();
-  const [mode, setMode] = useState("signup"); // "signup" | "login"
-  const [step, setStep] = useState(1);        // 1 | 2 | 3
+  const auth = useAuth();
+
+  const [step, setStep] = useState("email"); // "email" | "code" | "username"
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [otp, setOtp] = useState(EMPTY_CODE);
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [resendIn, setResendIn] = useState(0);
   const otpRefs = useRef([]);
+  const googleButtonRef = useRef(null);
 
-  function switchMode(next) {
-    setMode(next);
-    setStep(1);
+  // Already signed in? Finish the name step or go to the dashboard.
+  useEffect(() => {
+    if (auth.status !== "signedIn") return;
+    if (auth.account.username) router.replace("/dashboard");
+    else setStep("username");
+  }, [auth.status, auth.account, router]);
+
+  // Resend countdown
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const t = setTimeout(() => setResendIn((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [resendIn]);
+
+  const run = async (fn) => {
+    setLoading(true);
     setError("");
-  }
+    try {
+      await fn();
+    } catch (err) {
+      setError(err.message);
+      if (err.details?.retryAfter) setResendIn(err.details.retryAfter);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // ── OTP input helpers ──────────────────────────────────────
+  // Shared ending for email-code and Google sign-in
+  const completeSignIn = useCallback((data) => {
+    auth.signedIn(data.account);
+    if (data.needsUsername) setStep("username");
+    else router.push("/dashboard");
+  }, [auth, router]);
+
+  // ── Email ──
+  const sendCode = (e) => {
+    e?.preventDefault();
+    run(async () => {
+      await userApi.startEmail(email);
+      setOtp(EMPTY_CODE);
+      setStep("code");
+      setResendIn(RESEND_SECONDS);
+      setTimeout(() => otpRefs.current[0]?.focus(), 50);
+    });
+  };
+
+  // ── Code ──
+  const verifyCode = (digits) => run(async () => {
+    try {
+      completeSignIn(await userApi.verifyEmail(email, digits.join("")));
+    } catch (err) {
+      setOtp(EMPTY_CODE);
+      setTimeout(() => otpRefs.current[0]?.focus(), 50);
+      throw err;
+    }
+  });
+
   function handleOtpChange(i, value) {
-    const digit = value.replace(/\D/g, "").slice(-1);
+    let digits = value.replace(/\D/g, "");
     const next = [...otp];
-    next[i] = digit;
+    if (!digits) {
+      next[i] = "";
+      setOtp(next);
+      return;
+    }
+    // Typing over a filled box replaces it
+    if (otp[i] && digits.length === 2 && digits.includes(otp[i])) digits = digits.replace(otp[i], "");
+    // Autofill (phones fill "one-time-code" into the first box) or fast typing can bring several
+    // digits at once — spread them across the boxes
+    for (let k = 0; k < digits.length && i + k < 6; k++) next[i + k] = digits[k];
     setOtp(next);
-    if (digit && i < 5) otpRefs.current[i + 1]?.focus();
+    otpRefs.current[Math.min(i + digits.length, 5)]?.focus();
+    if (next.every(Boolean)) verifyCode(next); // auto-submit once all 6 are in
   }
 
   function handleOtpKey(i, e) {
-    if (e.key === "Backspace" && !otp[i] && i > 0) {
-      otpRefs.current[i - 1]?.focus();
-    }
+    if (e.key === "Backspace" && !otp[i] && i > 0) otpRefs.current[i - 1]?.focus();
   }
 
   function handleOtpPaste(e) {
     const digits = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    e.preventDefault();
     if (digits.length === 6) {
-      setOtp(digits.split(""));
+      const next = digits.split("");
+      setOtp(next);
       otpRefs.current[5]?.focus();
-    }
-    e.preventDefault();
-  }
-
-  // ── Step 1 — send OTP ──────────────────────────────────────
-  async function handleSendOtp(e) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    try {
-      const res = await fetch("/api/auth/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to send code");
-      setStep(2);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      verifyCode(next);
     }
   }
 
-  // ── Step 2 — verify OTP ───────────────────────────────────
-  async function handleVerifyOtp(e) {
+  // ── Username ──
+  const saveUsername = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    try {
-      const res = await fetch("/api/auth/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code: otp.join("") }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Invalid code");
-      setStep(3);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // ── Step 3 — create account ───────────────────────────────
-  async function handleCreateAccount(e) {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-    setLoading(true);
-    setError("");
-    try {
-      const res = await fetch("/api/auth/create-account", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, username }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to create account");
+    run(async () => {
+      const data = await userApi.setUsername(username);
+      auth.signedIn(data.account);
       router.push("/dashboard");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
+    });
+  };
 
-  // ── Login ─────────────────────────────────────────────────
-  async function handleLogin(e) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Login failed");
-      router.push("/dashboard");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // ── Google (Google Identity Services: popup / One Tap, never leaves the page) ──
+  const initGoogle = useCallback(() => {
+    if (!window.google || !googleButtonRef.current) return;
+    window.google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: ({ credential }) => run(async () => completeSignIn(await userApi.google(credential))),
+    });
+    window.google.accounts.id.renderButton(googleButtonRef.current, {
+      theme: "filled_black",
+      size: "large",
+      shape: "pill",
+      text: "continue_with",
+      width: 320,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completeSignIn]);
 
-  // ── Render ────────────────────────────────────────────────
+  // Re-render the button when coming back to the email step
+  useEffect(() => {
+    if (step === "email" && GOOGLE_CLIENT_ID && window.google) initGoogle();
+  }, [step, initGoogle]);
+
   return (
     <div className={styles.page}>
-      {/* subtle star-field bg */}
       <div className={styles.bg} aria-hidden="true" />
+      {GOOGLE_CLIENT_ID && (
+        <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onLoad={initGoogle} />
+      )}
 
       <div className={styles.card}>
-        {/* Logo */}
         <Link href="/" className={styles.logo}>SHADAWI</Link>
 
-        {/* Mode tabs */}
-        <div className={styles.tabs}>
-          <button
-            className={`${styles.tab} ${mode === "signup" ? styles.tabActive : ""}`}
-            onClick={() => switchMode("signup")}
-          >
-            Sign Up
-          </button>
-          <button
-            className={`${styles.tab} ${mode === "login" ? styles.tabActive : ""}`}
-            onClick={() => switchMode("login")}
-          >
-            Log In
-          </button>
+        <div className={styles.progress}>
+          {["email", "code", "username"].map((s, i) => (
+            <span key={s} className={`${styles.dot} ${["email", "code", "username"].indexOf(step) >= i ? styles.dotActive : ""}`} />
+          ))}
         </div>
 
-        {/* Step progress (signup only) */}
-        {mode === "signup" && (
-          <div className={styles.progress}>
-            {[1, 2, 3].map((n) => (
-              <span
-                key={n}
-                className={`${styles.dot} ${step >= n ? styles.dotActive : ""}`}
+        {error && <p className={styles.error} role="alert">{error}</p>}
+
+        {/* ── Step 1: email ── */}
+        {step === "email" && (
+          <>
+            <div className={styles.heading}>
+              <h1 className={styles.title}>Enter the realms</h1>
+              <p className={styles.hint}>Sign in or create your Mage. No password needed.</p>
+            </div>
+
+            <form onSubmit={sendCode} className={styles.form}>
+              <label className={styles.label} htmlFor="email">Email address</label>
+              <input
+                id="email"
+                className={styles.input}
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
               />
-            ))}
-          </div>
+              <button className={styles.cta} type="submit" disabled={loading}>
+                {loading ? "Sending…" : "Continue →"}
+              </button>
+            </form>
+
+            {GOOGLE_CLIENT_ID && (
+              <>
+                <div className={styles.divider}><span>or</span></div>
+                <div ref={googleButtonRef} className={styles.googleButton} />
+              </>
+            )}
+          </>
         )}
 
-        {/* Error */}
-        {error && <p className={styles.error}>{error}</p>}
-
-        {/* ── SIGNUP STEP 1: email ── */}
-        {mode === "signup" && step === 1 && (
-          <form onSubmit={handleSendOtp} className={styles.form}>
-            <label className={styles.label}>Email address</label>
-            <input
-              className={styles.input}
-              type="email"
-              placeholder="you@example.com"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={loading}
-            />
-            <button className={styles.cta} type="submit" disabled={loading}>
-              {loading ? "Sending…" : "Continue →"}
-            </button>
-          </form>
-        )}
-
-        {/* ── SIGNUP STEP 2: OTP ── */}
-        {mode === "signup" && step === 2 && (
-          <form onSubmit={handleVerifyOtp} className={styles.form}>
+        {/* ── Step 2: code ── */}
+        {step === "code" && (
+          <form onSubmit={(e) => { e.preventDefault(); verifyCode(otp); }} className={styles.form}>
             <p className={styles.hint}>
-              A 6-digit code was sent to<br />
+              We sent a 6-digit code to<br />
               <strong>{email}</strong>
             </p>
             <div className={styles.otpRow} onPaste={handleOtpPaste}>
@@ -211,7 +219,9 @@ export default function AuthPage() {
                   className={styles.otpBox}
                   type="text"
                   inputMode="numeric"
-                  maxLength={1}
+                  autoComplete={i === 0 ? "one-time-code" : "off"}
+                  aria-label={`Digit ${i + 1}`}
+                  maxLength={6} /* lets autofill drop the whole code in; handleOtpChange spreads it */
                   value={digit}
                   onChange={(e) => handleOtpChange(i, e.target.value)}
                   onKeyDown={(e) => handleOtpKey(i, e)}
@@ -219,106 +229,43 @@ export default function AuthPage() {
                 />
               ))}
             </div>
-            <button className={styles.cta} type="submit" disabled={loading}>
-              {loading ? "Verifying…" : "Verify Code"}
+            <button className={styles.cta} type="submit" disabled={loading || !otp.every(Boolean)}>
+              {loading ? "Verifying…" : "Verify code"}
             </button>
-            <button
-              type="button"
-              className={styles.ghost}
-              onClick={() => { setStep(1); setOtp(["","","","","",""]); }}
-            >
-              ← Change email
+            <button type="button" className={styles.ghost} onClick={() => sendCode()} disabled={loading || resendIn > 0}>
+              {resendIn > 0 ? `Resend code in ${resendIn}s` : "Resend code"}
+            </button>
+            <button type="button" className={styles.ghost} onClick={() => { setStep("email"); setError(""); }}>
+              ← Use a different email
             </button>
           </form>
         )}
 
-        {/* ── SIGNUP STEP 3: profile ── */}
-        {mode === "signup" && step === 3 && (
-          <form onSubmit={handleCreateAccount} className={styles.form}>
-            <label className={styles.label}>Email</label>
+        {/* ── Step 3: Mage name (first sign-in only) ── */}
+        {step === "username" && (
+          <form onSubmit={saveUsername} className={styles.form}>
+            <div className={styles.heading}>
+              <h1 className={styles.title}>Name your Mage</h1>
+              <p className={styles.hint}>This is how other Mages will see you. 3–20 letters, numbers or underscores.</p>
+            </div>
+            <label className={styles.label} htmlFor="username">Mage name</label>
             <input
-              className={`${styles.input} ${styles.inputLocked}`}
-              type="email"
-              value={email}
-              disabled
-            />
-
-            <label className={styles.label}>Password</label>
-            <input
-              className={styles.input}
-              type="password"
-              placeholder="Create a password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={loading}
-            />
-
-            <label className={styles.label}>Confirm password</label>
-            <input
-              className={styles.input}
-              type="password"
-              placeholder="Repeat password"
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              disabled={loading}
-            />
-
-            <label className={styles.label}>Username</label>
-            <input
+              id="username"
               className={styles.input}
               type="text"
-              placeholder="Choose a username"
+              autoComplete="username"
+              placeholder="e.g. Storm_Walker"
               required
+              minLength={3}
+              maxLength={20}
+              pattern="[A-Za-z0-9_]+"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={loading}
             />
-
-            <div className={styles.walletSection}>
-              <p className={styles.walletLabel}>Verify a wallet <span>(optional)</span></p>
-              <button type="button" className={styles.walletBtn}>
-                Connect Wallet
-              </button>
-            </div>
-
             <button className={styles.cta} type="submit" disabled={loading}>
-              {loading ? "Creating…" : "Create Account"}
+              {loading ? "Saving…" : "Enter Shadawi →"}
             </button>
-          </form>
-        )}
-
-        {/* ── LOGIN ── */}
-        {mode === "login" && (
-          <form onSubmit={handleLogin} className={styles.form}>
-            <label className={styles.label}>Email address</label>
-            <input
-              className={styles.input}
-              type="email"
-              placeholder="you@example.com"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={loading}
-            />
-
-            <label className={styles.label}>Password</label>
-            <input
-              className={styles.input}
-              type="password"
-              placeholder="Your password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={loading}
-            />
-
-            <button className={styles.cta} type="submit" disabled={loading}>
-              {loading ? "Signing in…" : "Sign In"}
-            </button>
-
-            <a href="#" className={styles.ghost}>Forgot password?</a>
           </form>
         )}
       </div>
