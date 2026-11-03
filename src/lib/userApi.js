@@ -55,6 +55,9 @@ export const userApi = {
   startEmail: (email) => request("/auth/email/start", { method: "POST", body: { email } }),
   verifyEmail: (email, code) => request("/auth/email/verify", { method: "POST", body: { email, code, client: "web" } }),
   google: (idToken) => request("/auth/google", { method: "POST", body: { idToken, client: "web" } }),
-  setUsername: (username) => request("/me/username", { method: "PATCH", body: { username } }),
+  setUsername: (username, avatar) => request("/me/username", { method: "PATCH", body: { username, avatar } }),
+  setAvatar: (avatar) => request("/me/avatar", { method: "PATCH", body: { avatar } }),
+  archive: () => request("/me/archive"),
+  collection: () => request("/me/collection"),
   logout: () => request("/auth/logout", { method: "POST" }),
 };

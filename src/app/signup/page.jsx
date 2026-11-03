@@ -1,7 +1,7 @@
 "use client";
 
 // One passwordless flow for new and returning Mages:
-// email → 6-digit code → (first time only) pick a Mage name → dashboard.
+// email → 6-digit code → (first time only) pick a portrait and Mage name → dashboard.
 // "Continue with Google" skips straight past the code step.
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { userApi } from "@/lib/userApi";
 import { useAuth } from "@/providers/AuthProvider";
+import AvatarPicker from "@/components/AvatarPicker/AvatarPicker";
 import styles from "./page.module.css";
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -23,6 +24,7 @@ export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(EMPTY_CODE);
   const [username, setUsername] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resendIn, setResendIn] = useState(0);
@@ -123,7 +125,7 @@ export default function SignInPage() {
   const saveUsername = (e) => {
     e.preventDefault();
     run(async () => {
-      const data = await userApi.setUsername(username);
+      const data = await userApi.setUsername(username, avatar);
       auth.signedIn(data.account);
       router.push("/dashboard");
     });
@@ -245,9 +247,10 @@ export default function SignInPage() {
         {step === "username" && (
           <form onSubmit={saveUsername} className={styles.form}>
             <div className={styles.heading}>
-              <h1 className={styles.title}>Name your Mage</h1>
-              <p className={styles.hint}>This is how other Mages will see you. 3–20 letters, numbers or underscores.</p>
+              <h1 className={styles.title}>Create your Mage</h1>
+              <p className={styles.hint}>Choose a portrait and a name. This is how other Mages will see you.</p>
             </div>
+            <AvatarPicker value={avatar} onChange={setAvatar} disabled={loading} />
             <label className={styles.label} htmlFor="username">Mage name</label>
             <input
               id="username"
@@ -255,6 +258,7 @@ export default function SignInPage() {
               type="text"
               autoComplete="username"
               placeholder="e.g. Storm_Walker"
+              title="3–20 letters, numbers or underscores"
               required
               minLength={3}
               maxLength={20}

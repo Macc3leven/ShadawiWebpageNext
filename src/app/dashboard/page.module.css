@@ -1,156 +1,960 @@
+/* ── Page shell ──────────────────────────────────────────── */
 .page {
+    --panel-bg: linear-gradient(160deg, rgba(42, 16, 19, 0.55) 0%, rgba(16, 9, 10, 0.65) 100%);
+    --panel-border: rgba(222, 105, 105, 0.16);
+    --line: rgba(255, 255, 255, 0.1);
+    --muted: rgba(255, 255, 255, 0.55);
+    --radius: 14px;
+
     min-height: 100vh;
-    background: radial-gradient(ellipse at 50% 0%, rgba(30, 10, 10, 1) 0%, #0a0808 60%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 100px var(--mainPadding) 60px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(40, 12, 14, 1) 0%, #0a0708 60%);
+    padding: calc(var(--navHeight) + 28px) var(--mainPadding) 72px;
 }
 
 .container {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 28px;
-    width: 100%;
-    max-width: 500px;
-}
-
-/* ── Character ───────────────────────────────────────────── */
-.characterWrap {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.character {
-    object-fit: contain;
-    filter: drop-shadow(0 0 40px rgba(222, 105, 105, 0.18));
-}
-
-.characterBadge {
-    font-family: var(--font-main);
-    font-size: 0.62rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 999px;
-    padding: 4px 14px;
-}
-
-/* ── Info ────────────────────────────────────────────────── */
-.info {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.greeting {
-    font-family: var(--font-main);
-    font-size: 0.68rem;
-    letter-spacing: 4px;
-    color: var(--theme1);
-    margin: 0;
-    text-transform: uppercase;
-}
-
-.name {
-    font-family: var(--font-main);
-    font-size: 1.8rem;
-    font-weight: bold;
-    letter-spacing: 6px;
-    color: #fff;
-    margin: 0;
-    text-transform: uppercase;
-}
-
-.sub {
-    font-family: var(--font-main);
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.35);
-    margin: 0;
-    font-weight: normal;
-}
-
-/* ── Stat row ────────────────────────────────────────────── */
-.statsRow {
-    display: flex;
-    gap: 14px;
-    width: 100%;
-}
-
-.statCard {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 10px;
-    padding: 18px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-}
-
-.statValue {
-    font-family: var(--font-main);
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.statLabel {
-    font-family: var(--font-main);
-    font-size: 0.58rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.25);
-}
-
-.comingSoon {
-    font-family: var(--font-main);
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.18);
-    text-transform: uppercase;
-    margin: 0;
-}
-
-.email {
-    font-family: var(--font-main);
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.25);
-    margin: 4px 0 0;
 }
 
 .loading {
     font-family: var(--font-main);
     font-size: 0.75rem;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.35);
+    text-align: center;
+    margin: 30vh 0 0;
+}
+
+.loadingInline {
+    composes: loading;
+    margin: 40px 0;
+}
+
+.panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+}
+
+.panelTitle {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.sectionHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.sectionTitle {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+}
+
+.muted {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.textLink {
+    background: none;
+    border: 0;
+    padding: 4px 0;
+    font: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.textLink:hover { color: #fff; }
+
+.primaryBtn {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 11px 22px;
+    border: 1px solid rgba(255, 92, 92, 0.6);
+    border-radius: 999px;
+    background: rgba(255, 92, 92, 0.12);
+    color: #fff;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.primaryBtn:hover { background: rgba(255, 92, 92, 0.25); }
+
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.narrowOnly { display: none; }
+
+/* ── Progress bar ────────────────────────────────────────── */
+.bar {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.barFill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #c94a4a, var(--theme2));
+    box-shadow: 0 0 12px rgba(255, 92, 92, 0.45);
+    transition: width 0.6s ease;
+}
+
+/* ── Hero: identity + Archive level ──────────────────────── */
+.hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr) 290px;
+    align-items: center;
+    gap: 32px;
+    padding: 24px;
 }
 
 .signOut {
-    background: none;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 8px;
-    padding: 10px 22px;
-    color: rgba(255, 255, 255, 0.6);
-    font-family: var(--font-main);
-    font-size: 0.72rem;
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    padding: 6px 12px;
+    background: rgba(10, 6, 7, 0.55);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.55);
+    font: inherit;
+    font-size: 0.68rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     cursor: pointer;
-    transition: color 0.2s ease, border-color 0.2s ease;
+    transition: color 0.2s, border-color 0.2s;
 }
 
 .signOut:hover {
     color: #fff;
-    border-color: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 92, 92, 0.5);
+}
+
+.avatarArea {
+    position: relative;
+    justify-self: center;
+    width: 100%;
+    max-width: 200px;
+}
+
+.avatarWrap {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(255, 92, 92, 0.25), 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 36px rgba(222, 105, 105, 0.12);
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.06); /* trims the portrait's square corners so only the medallion shows */
+}
+
+.avatarEdit {
+    position: absolute;
+    right: 6%;
+    bottom: 6%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 92, 92, 0.45);
+    background: #1a0e10;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.avatarEdit:hover,
+.avatarEdit[aria-expanded="true"] {
+    color: #fff;
+    border-color: var(--theme2);
+    background: #2a1215;
+}
+
+.avatarEdit svg {
+    width: 16px;
+    height: 16px;
+}
+
+.avatarPopover {
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 16px 18px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--panel-border);
+    background: #160c0e;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+.identity {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.greeting {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--theme2);
+}
+
+.name {
+    margin: 0;
+    font-size: clamp(1.6rem, 3vw, 2.3rem);
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+}
+
+.sub {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.email {
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    overflow-wrap: anywhere;
+}
+
+.tiles {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 460px;
+}
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 6px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.tileValue {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.tileLabel {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.level {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding-left: 32px;
+    border-left: 1px solid var(--line);
+}
+
+.levelRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.levelNumber {
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.levelXp {
+    font-size: 0.85rem;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.levelXp b {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ── Tabs ────────────────────────────────────────────────── */
+.tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.tab {
+    position: relative;
+    flex: 0 1 auto;
+    padding: 14px 28px;
+    background: none;
+    border: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.tab:hover { color: rgba(255, 255, 255, 0.85); }
+
+.tab:focus-visible {
+    outline: 2px solid rgba(255, 92, 92, 0.6);
+    outline-offset: -2px;
+    border-radius: 6px;
+}
+
+.tabActive { color: #fff; }
+
+.tabActive::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--theme2);
+    box-shadow: 0 0 14px rgba(255, 92, 92, 0.7);
+}
+
+.tabPanel { min-height: 280px; }
+
+/* ── Collection ──────────────────────────────────────────── */
+.kinGrid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.kinCard {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.kinCard:hover {
+    border-color: var(--class-color);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 18px color-mix(in srgb, var(--class-color) 30%, transparent);
+}
+
+.kinImg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #151012;
+}
+
+.kinPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--class-color) 35%, transparent) 0%, transparent 60%),
+        linear-gradient(160deg, #1f1416, #0e0909);
+}
+
+.kinPlaceholder span {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--class-color) 70%, white);
+    opacity: 0.7;
+}
+
+.kinMeta {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 36px 14px 12px;
+    background: linear-gradient(to top, rgba(8, 5, 6, 0.95) 20%, transparent);
+}
+
+.kinName {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kinSid {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0 0;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+}
+
+.nftTag {
+    padding: 1px 6px;
+    border: 1px solid var(--class-color);
+    border-radius: 4px;
+    font-size: 0.55rem;
+    color: var(--class-color);
+}
+
+.moreTile {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font: inherit;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.moreTile:hover {
+    color: #fff;
+    border-color: rgba(255, 92, 92, 0.5);
+}
+
+.morePlus {
+    font-size: 2.4rem;
+    font-weight: 300;
+    line-height: 1;
+}
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 40px 24px;
+    text-align: center;
+}
+
+.emptyTitle {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.lowerRow {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    margin-top: 28px;
+}
+
+.recent,
+.nextMerit {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 22px 24px;
+}
+
+.recentList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 14px;
+}
+
+.recentImg {
+    width: 76px;
+    height: 66px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.recentImg.kinPlaceholder span { font-size: 1.3rem; }
+
+.nextMeritBody {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.nextMeritIcon {
+    flex: none;
+    width: 52px;
+    height: 52px;
+    color: #e8a07a;
+    filter: drop-shadow(0 0 8px rgba(232, 160, 122, 0.35));
+}
+
+.nextMeritText {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nextMeritHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.meritName {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.meritDesc {
+    margin: 0 0 6px;
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+.meritCount {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    white-space: nowrap;
+}
+
+/* ── Metrics ─────────────────────────────────────────────── */
+.metricsLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 24px;
+    align-items: start;
+}
+
+.metricsHead {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.metricsHead .sectionTitle { margin-bottom: 4px; }
+
+.metricsIcon {
+    width: 34px;
+    height: 34px;
+    fill: var(--theme1);
+}
+
+.chartPanel { padding: 26px 24px 18px; }
+
+.chart {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.chartRow,
+.chartAxis {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+}
+
+.chartLabel {
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.chartTrack {
+    position: relative;
+    height: 20px;
+    margin-right: 34px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: calc(100% / var(--ticks)) 100%;
+}
+
+.chartBar {
+    display: block;
+    height: 100%;
+    border-radius: 0 4px 4px 0;
+    transition: width 0.6s ease;
+}
+
+.chartValue {
+    position: absolute;
+    top: 50%;
+    transform: translate(8px, -50%);
+    font-size: 0.78rem;
+}
+
+.chartTicks {
+    position: relative;
+    height: 16px;
+    margin-right: 34px;
+}
+
+.chartTicks span {
+    position: absolute;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+.overview {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 26px 26px 28px;
+}
+
+.overviewList {
+    margin: 0 0 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.overviewRow {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.overviewRow svg {
+    width: 22px;
+    height: 22px;
+    color: #d98f8f;
+}
+
+.overviewRow dt {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.overviewRow dd {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.overviewRow small {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.topClass {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 6px 0 0;
+}
+
+.topClassMark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    border: 1px solid var(--class-color);
+    background: color-mix(in srgb, var(--class-color) 15%, transparent);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--class-color) 35%, transparent);
+    color: var(--class-color);
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.topClassName {
+    margin: 0 0 2px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+}
+
+/* ── Merits ──────────────────────────────────────────────── */
+.meritGrid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.meritCard {
+    display: flex;
+    gap: 18px;
+    padding: 20px;
+    opacity: 0.75;
+}
+
+.meritEarned {
+    opacity: 1;
+    border-color: rgba(232, 160, 122, 0.35);
+}
+
+.meritIcon {
+    flex: none;
+    width: 42px;
+    height: 42px;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.meritEarned .meritIcon {
+    color: #e8a07a;
+    filter: drop-shadow(0 0 8px rgba(232, 160, 122, 0.4));
+}
+
+.meritBody {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meritXp {
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    color: var(--theme1);
+    white-space: nowrap;
+}
+
+.meritProgress {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+}
+
+.meritDone {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #e8a07a;
+}
+
+/* ── Tablet ──────────────────────────────────────────────── */
+@media (max-width: 1000px) {
+    .hero {
+        grid-template-columns: 180px minmax(0, 1fr);
+    }
+
+    .level {
+        grid-column: 1 / -1;
+        padding: 20px 0 0;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+    }
+
+    .kinGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .metricsLayout { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ── Phone ───────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .page { padding-top: calc(var(--navHeight) + 8px); }
+
+    .container { gap: 22px; }
+
+    .wideOnly { display: none; }
+    .narrowOnly { display: inline; }
+
+    /* Banner image on top, then name, Archive level, then the stat tiles */
+    .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+        padding: 14px;
+        text-align: center;
+    }
+
+    .identity { display: contents; }
+
+    .avatarArea {
+        order: 0;
+        align-self: center;
+        width: 140px;
+        margin-top: 8px;
+    }
+
+    .avatarEdit {
+        width: 30px;
+        height: 30px;
+    }
+
+    .greeting { order: 1; margin-bottom: -12px; }
+    .name { order: 2; letter-spacing: 4px; }
+    .sub { display: none; }
+    .email { order: 3; margin-top: -14px; }
+
+    .level {
+        order: 4;
+        padding: 0 4px;
+        border-top: 0;
+        text-align: left;
+    }
+
+    .levelNumber { font-size: 2.2rem; }
+
+    .tiles {
+        order: 5;
+        margin: 0;
+        gap: 8px;
+        max-width: none;
+    }
+
+    .tile { padding: 10px 4px; }
+    .tileValue { font-size: 1.2rem; }
+    .tileLabel { font-size: 0.55rem; letter-spacing: 1.5px; }
+
+    .signOut {
+        top: 22px;
+        right: 22px;
+        z-index: 1;
+    }
+
+    .tab {
+        flex: 1;
+        padding: 12px 4px;
+        font-size: 0.72rem;
+        letter-spacing: 2px;
+    }
+
+    .sectionTitle { font-size: 1rem; letter-spacing: 3.5px; }
+
+    .kinGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .kinCard,
+    .moreTile { aspect-ratio: 1 / 1; }
+
+    .kinMeta { display: none; }
+
+    .moreTile span:not(.morePlus) { display: none; }
+
+    .lowerRow {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        margin-top: 22px;
+    }
+
+    .recent,
+    .nextMerit { padding: 18px; }
+
+    .recentList {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .recentImg {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+    }
+
+    .nextMeritBody { gap: 16px; }
+    .nextMeritIcon { width: 40px; height: 40px; }
+
+    .chartPanel { padding: 20px 14px 14px; }
+
+    .chartRow,
+    .chartAxis {
+        grid-template-columns: 74px minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .chartLabel { font-size: 0.62rem; letter-spacing: 1px; }
+
+    .overview { padding: 22px 18px; }
+
+    .meritGrid { grid-template-columns: minmax(0, 1fr); }
 }

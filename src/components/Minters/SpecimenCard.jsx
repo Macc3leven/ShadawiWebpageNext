@@ -1,16 +1,5 @@
 import styles from "@/app/shop/specimen-mint/page.module.css";
-
-// Class tag colours, one per realm
-const CLASS_COLORS = {
-  beast: "#f2584e",
-  plant: "#6fcf73",
-  fairy: "#d68cf0",
-  elemental: "#9fb4c8",
-  undead: "#a58cf0",
-  gas: "#5fb8f0",
-  humanoid: "#b8b8b8",
-  divine: "#e8c36a",
-};
+import { CLASS_COLORS } from "@/lib/specimenClasses";
 
 export default function SpecimenCard({ specimen, position }) {
   const color = CLASS_COLORS[specimen.className.toLowerCase()] || "#b8b8b8";
