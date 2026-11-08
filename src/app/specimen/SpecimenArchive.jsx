@@ -6,112 +6,28 @@ import { formStageName, specimenFormTitle } from "@/lib/specimenForms";
 import styles from "./page.module.css";
 
 // ============================================================
-// SAMPLE DATA: tokens and owners are still placeholders.
+// SAMPLE DATA: owners are still placeholders.
 // Specimens come from the content server (see page.jsx).
 // ============================================================
 
-const TOKENS = [
-  {
-    sid: "T-001", name: "Phoenix Crest", className: "divine",
-    description: "A sacred token forged from the ashes of the first Phoenix to grace the Shadawi skies. Grants its bearer one revival per cycle.",
-    mugshot: "/images/specimen-temp/mightybird.png",
-    forms: [{ image: "/images/specimen-temp/mightybird.png" }],
-    currentForm: 0,
-    attributes: [
-      { name: "Rarity", value: "Legendary" },
-      { name: "Class", value: "Divine" },
-      { name: "Tradeable", value: "Yes" },
-      { name: "Edition", value: "1 of 50" },
-    ],
-    stats: [
-      { name: "Power", value: 95, max: 100 },
-      { name: "Stability", value: 70, max: 100 },
-      { name: "Charge", value: 88, max: 100 },
-    ],
-    abilities: [],
-    metrics: null,
-  },
-  {
-    sid: "T-002", name: "Stormcaller", className: "elemental",
-    description: "A focusing crystal that channels storm energy directly into a bound specimen.",
-    mugshot: "/images/specimen-temp/cloudogre.png",
-    forms: [{ image: "/images/specimen-temp/cloudogre.png" }],
-    currentForm: 0,
-    attributes: [
-      { name: "Rarity", value: "Epic" },
-      { name: "Class", value: "Elemental" },
-      { name: "Tradeable", value: "Yes" },
-      { name: "Edition", value: "12 of 200" },
-    ],
-    stats: [
-      { name: "Power", value: 78, max: 100 },
-      { name: "Stability", value: 65, max: 100 },
-      { name: "Charge", value: 72, max: 100 },
-    ],
-    abilities: [],
-    metrics: null,
-  },
-  {
-    sid: "T-003", name: "Bone Sigil", className: "undead",
-    description: "An etched fragment of an ancient ribcage, humming with low purgatory energy.",
-    mugshot: "/images/specimen-temp/domigra.png",
-    forms: [{ image: "/images/specimen-temp/domigra.png" }],
-    currentForm: 0,
-    attributes: [
-      { name: "Rarity", value: "Rare" },
-      { name: "Class", value: "Undead" },
-      { name: "Tradeable", value: "Yes" },
-      { name: "Edition", value: "44 of 500" },
-    ],
-    stats: [
-      { name: "Power", value: 60, max: 100 },
-      { name: "Stability", value: 80, max: 100 },
-      { name: "Charge", value: 55, max: 100 },
-    ],
-    abilities: [],
-    metrics: null,
-  },
-  {
-    sid: "T-004", name: "Tide Cipher", className: "gas",
-    description: "A waterproof scroll-token that lets a specimen breathe in any medium for one full cycle.",
-    mugshot: "/images/specimen-temp/seapuk.png",
-    forms: [{ image: "/images/specimen-temp/seapuk.png" }],
-    currentForm: 0,
-    attributes: [
-      { name: "Rarity", value: "Uncommon" },
-      { name: "Class", value: "Gas" },
-      { name: "Tradeable", value: "Yes" },
-      { name: "Edition", value: "180 of 2000" },
-    ],
-    stats: [
-      { name: "Power", value: 45, max: 100 },
-      { name: "Stability", value: 90, max: 100 },
-      { name: "Charge", value: 50, max: 100 },
-    ],
-    abilities: [],
-    metrics: null,
-  },
-];
+// Kin are the individual minted specimen. None are minted yet, so this tab shows its empty message.
+const KIN = [];
 
 const OWNERS = [
-  { username: "oneiric", name: "Oneiric", handle: "oneiric.shdw", title: "Founding Architect", profileImage: "https://i.pravatar.cc/150?img=12", worldRank: 1, specimenOwned: 247, tokensOwned: 89, bio: "Founding architect of the Shadawi Universe. Forged the first six clans and still walks among them under different names.", recentCollection: ["/images/specimen-temp/domigra.png", "/images/specimen-temp/mightybird.png", "/images/specimen-temp/cloudogre.png", "/images/specimen-temp/seapuk.png"] },
-  { username: "stormwalker", name: "Storm Walker", handle: "storm.w", title: "Elite Purgator", profileImage: "https://i.pravatar.cc/150?img=33", worldRank: 2, specimenOwned: 198, tokensOwned: 64, bio: "Veteran of 312 Purg cycles. Commands a tempest aviary and prefers Divine and Elemental specimens.", recentCollection: ["/images/specimen-temp/mightybird.png", "/images/specimen-temp/cloudogre.png"] },
-  { username: "verdant", name: "Verdant", handle: "verdant.eth", title: "Plant Cultivator", profileImage: "https://i.pravatar.cc/150?img=47", worldRank: 3, specimenOwned: 156, tokensOwned: 41, bio: "Caretaker of the Last Greenhouse. Specializes in Plant-class specimens and root-bound tokens.", recentCollection: ["/images/specimen-temp/mightybird.png"] },
-  { username: "bonewright", name: "Bonewright", handle: "bonewright", title: "Necro Engineer", profileImage: "https://i.pravatar.cc/150?img=68", worldRank: 4, specimenOwned: 142, tokensOwned: 73, bio: "Reverse-engineers the Undead. Holds the largest known cache of Bone Sigil tokens.", recentCollection: ["/images/specimen-temp/domigra.png", "/images/specimen-temp/cloudogre.png"] },
-  { username: "kira_05", name: "Kira", handle: "kira.05", title: "Token Trader", profileImage: "https://i.pravatar.cc/150?img=25", worldRank: 5, specimenOwned: 88, tokensOwned: 412, bio: "Doesn't fight. Doesn't summon. Just trades — and holds the deepest token vault on this side of the Purg.", recentCollection: ["/images/specimen-temp/seapuk.png"] },
-  { username: "fenric", name: "Fenric", handle: "fenric.gx", title: "Beast Tamer", profileImage: "https://i.pravatar.cc/150?img=51", worldRank: 6, specimenOwned: 76, tokensOwned: 22, bio: "Walks the outer wilds. Bonded to a pack of three Beast-class specimens since cycle 14.", recentCollection: ["/images/specimen-temp/mightybird.png"] },
-  { username: "mira_void", name: "Mira Void", handle: "mira.void", title: "Quantum Adept", profileImage: "https://i.pravatar.cc/150?img=44", worldRank: 7, specimenOwned: 64, tokensOwned: 38, bio: "Reads the gaps between cycles. Quantum discipline only.", recentCollection: ["/images/specimen-temp/cloudogre.png"] },
-  { username: "newpurg42", name: "newpurg42", handle: "newpurg42", title: "Apprentice", profileImage: "https://i.pravatar.cc/150?img=8", worldRank: 248, specimenOwned: 3, tokensOwned: 1, bio: "Just started. Saving up for a second specimen.", recentCollection: ["/images/specimen-temp/seapuk.png"] },
+  { username: "oneiric", name: "Oneiric", handle: "oneiric.shdw", title: "Founding Architect", profileImage: "https://i.pravatar.cc/150?img=12", worldRank: 1, specimenOwned: 247, kinOwned: 89, bio: "Founding architect of the Shadawi Universe. Forged the first six clans and still walks among them under different names.", recentCollection: ["/images/specimen-temp/domigra.png", "/images/specimen-temp/mightybird.png", "/images/specimen-temp/cloudogre.png", "/images/specimen-temp/seapuk.png"] },
+  { username: "stormwalker", name: "Storm Walker", handle: "storm.w", title: "Elite Purgator", profileImage: "https://i.pravatar.cc/150?img=33", worldRank: 2, specimenOwned: 198, kinOwned: 64, bio: "Veteran of 312 Purg cycles. Commands a tempest aviary and prefers Divine and Elemental specimens.", recentCollection: ["/images/specimen-temp/mightybird.png", "/images/specimen-temp/cloudogre.png"] },
+  { username: "verdant", name: "Verdant", handle: "verdant.eth", title: "Plant Cultivator", profileImage: "https://i.pravatar.cc/150?img=47", worldRank: 3, specimenOwned: 156, kinOwned: 41, bio: "Caretaker of the Last Greenhouse. Specializes in Plant-class specimens and root-bound tokens.", recentCollection: ["/images/specimen-temp/mightybird.png"] },
+  { username: "bonewright", name: "Bonewright", handle: "bonewright", title: "Necro Engineer", profileImage: "https://i.pravatar.cc/150?img=68", worldRank: 4, specimenOwned: 142, kinOwned: 73, bio: "Reverse-engineers the Undead. Holds the largest known cache of Bone Sigil tokens.", recentCollection: ["/images/specimen-temp/domigra.png", "/images/specimen-temp/cloudogre.png"] },
+  { username: "kira_05", name: "Kira", handle: "kira.05", title: "Token Trader", profileImage: "https://i.pravatar.cc/150?img=25", worldRank: 5, specimenOwned: 88, kinOwned: 412, bio: "Doesn't fight. Doesn't summon. Just trades — and holds the deepest token vault on this side of the Purg.", recentCollection: ["/images/specimen-temp/seapuk.png"] },
+  { username: "fenric", name: "Fenric", handle: "fenric.gx", title: "Beast Tamer", profileImage: "https://i.pravatar.cc/150?img=51", worldRank: 6, specimenOwned: 76, kinOwned: 22, bio: "Walks the outer wilds. Bonded to a pack of three Beast-class specimens since cycle 14.", recentCollection: ["/images/specimen-temp/mightybird.png"] },
+  { username: "mira_void", name: "Mira Void", handle: "mira.void", title: "Quantum Adept", profileImage: "https://i.pravatar.cc/150?img=44", worldRank: 7, specimenOwned: 64, kinOwned: 38, bio: "Reads the gaps between cycles. Quantum discipline only.", recentCollection: ["/images/specimen-temp/cloudogre.png"] },
+  { username: "newpurg42", name: "newpurg42", handle: "newpurg42", title: "Apprentice", profileImage: "https://i.pravatar.cc/150?img=8", worldRank: 248, specimenOwned: 3, kinOwned: 1, bio: "Just started. Saving up for a second specimen.", recentCollection: ["/images/specimen-temp/seapuk.png"] },
 ];
 
 const SPECIMEN_FILTER_CONFIGS = [
   { key: "Class", label: "Class", options: ["divine", "elemental", "gas", "undead", "humanoid", "plant", "beast", "fairy"] },
   { key: "Build", label: "Build", options: ["Base", "Colors", "Evo", "Fusion"] },
   { key: "PurgLvl", label: "Purg Level", options: ["weak", "resistant", "strong", "mighty", "supermighty", "unpurgable"] },
-];
-
-const TOKEN_FILTER_CONFIGS = [
-  { key: "Class", label: "Class", options: ["divine", "elemental", "gas", "undead", "plant", "beast"] },
 ];
 
 const OWNER_FILTER_CONFIGS = [
@@ -245,7 +161,7 @@ export default function SpecimenArchive({ specimens, loadError }) {
     const searchFields = activeTab === "owners"
       ? ["username", "name", "handle", "title"]
       : ["name", "sid", "description", "creator"];
-    const source = activeTab === "specimen" ? specimens : activeTab === "tokens" ? TOKENS : OWNERS;
+    const source = activeTab === "specimen" ? specimens : activeTab === "kin" ? KIN : OWNERS;
     let data = searchFilter(source, debouncedSearch, searchFields);
     if (activeTab === "owners") {
       data = applyOwnerSort(data, filter.OrderBy);
@@ -259,9 +175,7 @@ export default function SpecimenArchive({ specimens, loadError }) {
   const totalPages = Math.max(1, Math.ceil(allItems.length / ITEMS_PER_PAGE));
   const pageItems  = allItems.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
-  const filterConfigs = activeTab === "specimen" ? SPECIMEN_FILTER_CONFIGS
-                      : activeTab === "tokens"   ? TOKEN_FILTER_CONFIGS
-                      : OWNER_FILTER_CONFIGS;
+  const filterConfigs = activeTab === "specimen" ? SPECIMEN_FILTER_CONFIGS : OWNER_FILTER_CONFIGS;
 
   const openSpecimenModal = (item) => {
     setSpecimenModal(item);
@@ -269,7 +183,7 @@ export default function SpecimenArchive({ specimens, loadError }) {
     setModalTab("overview");
   };
 
-  // The modal shows the selected form's own details; tokens (no per-form data) fall back to the item itself
+  // The modal shows the selected form's own details
   const view = specimenModal ? { ...specimenModal, ...specimenModal.forms?.[formIndex] } : null;
   const modalTitle = view && (view.title ?? specimenFormTitle(specimenModal.name, formIndex));
 
@@ -332,8 +246,8 @@ export default function SpecimenArchive({ specimens, loadError }) {
           <div className={styles.filterInner}>
             <div className={styles.tabs} role="tablist">
               {[
-                { id: "specimen", label: "Specimens" },
-                { id: "tokens", label: "Tokens" },
+                { id: "specimen", label: "Specimen" },
+                { id: "kin", label: "Kin" },
                 { id: "owners", label: "Owners" },
               ].map(({ id, label }) => (
                 <button
@@ -347,6 +261,8 @@ export default function SpecimenArchive({ specimens, loadError }) {
                 </button>
               ))}
             </div>
+            {/* Nothing to search or filter until kin exist */}
+            {activeTab !== "kin" && (
             <div className={styles.searchRow}>
               <div className={styles.searchWrap}>
                 <svg className={styles.searchIcon} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
@@ -371,6 +287,7 @@ export default function SpecimenArchive({ specimens, loadError }) {
                 <span className={styles.filterLabel}>Filters</span>
               </button>
             </div>
+            )}
           </div>
         </div>
 
@@ -378,7 +295,11 @@ export default function SpecimenArchive({ specimens, loadError }) {
         <div className={styles.content}>
           {pageItems.length === 0 ? (
             <p className={styles.noData}>
-              {activeTab === "specimen" && loadError ? "THE ARCHIVE IS UNREACHABLE. TRY AGAIN SOON." : "NO RESULTS FOUND"}
+              {activeTab === "kin"
+                ? "No kin discovered at this time"
+                : activeTab === "specimen" && loadError
+                  ? "THE ARCHIVE IS UNREACHABLE. TRY AGAIN SOON."
+                  : "NO RESULTS FOUND"}
             </p>
           ) : activeTab === "owners" ? (
             <div className={styles.ownersList}>
@@ -483,8 +404,7 @@ export default function SpecimenArchive({ specimens, loadError }) {
                     View in 3D
                   </button>
 
-                  {/* Forms are a specimen concept — tokens don't get the switcher */}
-                  {formCount > 0 && activeTab !== "tokens" && (
+                  {formCount > 0 && (
                     <div className={styles.formPill} role="group" aria-label="Specimen form">
                       {formCount > 1 && (
                         <button className={styles.formPillArrow} onClick={() => changeForm(-1)} aria-label="Previous form">‹</button>
@@ -545,12 +465,16 @@ export default function SpecimenArchive({ specimens, loadError }) {
                         <div className={styles.statBars}>
                           {view.stats.map((s) => (
                             <div key={s.name} className={styles.statRow}>
-                              <span className={styles.statName}>{s.name}</span>
-                              <div className={styles.statTrack}>
-                                <div className={styles.statFill} style={{ width: `${Math.min(100, (s.value / s.max) * 100)}%` }} />
-                              </div>
-                              {/* Catalog stats are measured against the archive's highest value, so only the value is shown */}
-                              <span className={styles.statVal}>{s.relative ? s.value.toLocaleString() : `${s.value} / ${s.max}`}</span>
+                              <span className={styles.statName} title={s.description}>{s.name}</span>
+                              {/* A stat with no maximum (weight) is just a number, so its bar column stays empty */}
+                              {s.max ? (
+                                <div className={styles.statTrack}>
+                                  <div className={styles.statFill} style={{ width: `${Math.min(100, (s.value / s.max) * 100)}%` }} />
+                                </div>
+                              ) : <span />}
+                              <span className={styles.statVal}>
+                                {s.max ? `${s.value.toLocaleString()} / ${s.max.toLocaleString()}` : s.value.toLocaleString()}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -610,7 +534,7 @@ export default function SpecimenArchive({ specimens, loadError }) {
                       ))}
                     </div>
                   ) : (
-                    <p className={styles.noData} style={{ margin: "20px 0" }}>No metrics available for tokens.</p>
+                    <p className={styles.noData} style={{ margin: "20px 0" }}>No metrics available.</p>
                   )
                 )}
               </div>
@@ -642,8 +566,8 @@ export default function SpecimenArchive({ specimens, loadError }) {
                     <span className={styles.tileValue}>{ownerModal.specimenOwned}</span>
                   </div>
                   <div className={styles.statTile}>
-                    <span className={styles.tileLabel}>TOKENS</span>
-                    <span className={styles.tileValue}>{ownerModal.tokensOwned}</span>
+                    <span className={styles.tileLabel}>KIN</span>
+                    <span className={styles.tileValue}>{ownerModal.kinOwned}</span>
                   </div>
                 </div>
                 {ownerModal.bio && (
