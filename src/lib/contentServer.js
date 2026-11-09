@@ -22,7 +22,7 @@ export async function fetchSpecimens() {
 }
 
 function toArchiveItem(species) {
-  const forms = species.forms.map((form) => toArchiveForm(form, species));
+  const forms = species.forms.map(toArchiveForm);
   const first = forms[0];
   return {
     sid: species.sid,
@@ -32,12 +32,13 @@ function toArchiveItem(species) {
     creator: null,
     mugshot: forms.find((f) => f.image)?.image ?? null,
     currentForm: 0, // forms are 1-based in the catalog, 0-based here (index 0 = Alpha)
+    totalForms: species.totalForms,
     attributes: first?.attributes ?? [], // species-level copy, used by the filters
     forms,
   };
 }
 
-function toArchiveForm(form, species) {
+function toArchiveForm(form) {
   return {
     title: form.name,
     image: form.mugshot,
@@ -62,15 +63,10 @@ function toArchiveForm(form, species) {
         { label: "COOLDOWN", value: `${ability.cooldown}s` },
       ],
     })),
-    metrics: {
-      groups: [
-        { title: "POPULATION", items: [
-          { label: "Total", value: form.population?.total ?? 0 },
-          { label: "Owned", value: form.population?.owned ?? 0 },
-          { label: "This form", value: form.population?.thisForm ?? 0 },
-        ] },
-        { title: "LINEAGE", items: [{ label: "Total forms", value: species.totalForms }] },
-      ],
+    population: {
+      total: form.population?.total ?? 0,
+      owned: form.population?.owned ?? 0,
+      thisForm: form.population?.thisForm ?? 0,
     },
   };
 }

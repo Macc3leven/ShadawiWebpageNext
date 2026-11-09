@@ -2,10 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import PortalCanvas from "@/components/PortalCanvas/PortalCanvas";
-import SpecimenViewer from "@/components/SpecimenViewer/SpecimenViewer";
-import { unityViewer } from "@/lib/unityViewer";
-import SpecimenDetails from "./SpecimenDetails";
-import { formStageName, specimenFormTitle } from "@/lib/specimenForms";
+import SpecimenDisplay from "@/components/SpecimenDisplay/SpecimenDisplay";
 import styles from "./page.module.css";
 
 // ============================================================
@@ -21,7 +18,7 @@ const OWNERS = [];
 const SPECIMEN_FILTER_CONFIGS = [
   { key: "Class", label: "Class", options: ["divine", "elemental", "gas", "undead", "humanoid", "plant", "beast", "fairy"] },
   { key: "Build", label: "Build", options: ["Base", "Colors", "Evo", "Fusion"] },
-  { key: "PurgLvl", label: "Purg Level", options: ["weak", "resistant", "strong", "mighty", "supermighty", "unpurgable"] },
+  { key: "PurgLvl", label: "Level", options: ["weak", "resistant", "strong", "mighty", "supermighty", "unpurgable"] },
 ];
 
 const OWNER_FILTER_CONFIGS = [
@@ -82,14 +79,13 @@ export default function SpecimenArchive({ specimens, loadError }) {
   const [pendingFilter, setPendingFilter] = useState({});
   const [page, setPage]                   = useState(1);
 
-  // Modals
-  const [specimenModal, setSpecimenModal] = useState(null);
-  const [ownerModal, setOwnerModal]       = useState(null);
-  const [viewerOpen, setViewerOpen]       = useState(false);
-  const [filtersOpen, setFiltersOpen]     = useState(false);
+  // The specimen open in the Specimen Display, and which of its forms is showing
+  const [selected, setSelected]   = useState(null);
+  const [formIndex, setFormIndex] = useState(0);
 
-  // Inside specimen modal
-  const [formIndex, setFormIndex]   = useState(0);
+  // Modals
+  const [ownerModal, setOwnerModal]   = useState(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Sticky filter bar detection
   const [stuck, setStuck] = useState(false);
@@ -126,26 +122,20 @@ export default function SpecimenArchive({ specimens, loadError }) {
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
-        // The viewer sits on top of the card, so Escape only goes back one step
-        if (viewerOpen) {
-          setViewerOpen(false);
-          return;
-        }
-        setSpecimenModal(null);
         setOwnerModal(null);
         setFiltersOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [viewerOpen]);
+  }, []);
 
-  // Lock body scroll when any modal is open
+  // Lock body scroll while the display or a modal is open
   useEffect(() => {
-    const open = specimenModal || ownerModal || filtersOpen;
+    const open = selected || ownerModal || filtersOpen;
     document.body.style.overflow = open ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [specimenModal, ownerModal, filtersOpen]);
+  }, [selected, ownerModal, filtersOpen]);
 
   // Reset pagination on tab/search/filter change
   useEffect(() => { setPage(1); }, [activeTab, debouncedSearch, filter]);
@@ -171,58 +161,19 @@ export default function SpecimenArchive({ specimens, loadError }) {
 
   const filterConfigs = activeTab === "specimen" ? SPECIMEN_FILTER_CONFIGS : OWNER_FILTER_CONFIGS;
 
-  const openSpecimenModal = (item) => {
-    setSpecimenModal(item);
+  const openDisplay = (item) => {
+    setSelected(item);
     setFormIndex(item.currentForm || 0);
   };
 
-  // The modal shows the selected form's own details
-  const view = specimenModal ? { ...specimenModal, ...specimenModal.forms?.[formIndex] } : null;
-  const modalTitle = view && (view.title ?? specimenFormTitle(specimenModal.name, formIndex));
-  const viewerAddress = view?.webDisplay ?? null;
-
-  // Clicking a card shows interest, so start Unity behind it once the browser is free. By the
-  // time the visitor presses "View in 3D" the viewer and this specimen are often already loaded.
-  useEffect(() => {
-    if (!viewerAddress) return;
-    const startSoon = window.requestIdleCallback ?? ((run) => setTimeout(run, 200));
-    const cancel = window.cancelIdleCallback ?? clearTimeout;
-    const handle = startSoon(() => unityViewer.preload(viewerAddress));
-    return () => cancel(handle);
-  }, [viewerAddress]);
+  const closeDisplay = useCallback(() => setSelected(null), []);
 
   // Step through forms, wrapping around at either end
-  const formCount = specimenModal?.forms?.length || 0;
+  const formCount = selected?.forms?.length || 0;
   const changeForm = (delta) => {
     if (formCount < 2) return;
     setFormIndex((f) => (f + delta + formCount) % formCount);
   };
-
-  // Swipe left/right on the hero image to change form
-  const swipeStartX = useRef(null);
-  const onHeroTouchStart = (e) => { swipeStartX.current = e.touches[0].clientX; };
-  const onHeroTouchEnd = (e) => {
-    if (swipeStartX.current == null) return;
-    const dx = e.changedTouches[0].clientX - swipeStartX.current;
-    swipeStartX.current = null;
-    if (Math.abs(dx) > 40) changeForm(dx < 0 ? 1 : -1);
-  };
-
-  // Forms are chosen from the same control on the card and in the viewer
-  const formPill = formCount > 0 && (
-    <div className={styles.formPill} role="group" aria-label="Specimen form">
-      {formCount > 1 && (
-        <button className={styles.formPillArrow} onClick={() => changeForm(-1)} aria-label="Previous form">‹</button>
-      )}
-      <span className={styles.formPillInfo} aria-live="polite">
-        <span className={styles.formPillName}>{formStageName(formIndex)}</span>
-        <span className={styles.formPillCount}>{formIndex + 1}/{formCount}</span>
-      </span>
-      {formCount > 1 && (
-        <button className={styles.formPillArrow} onClick={() => changeForm(1)} aria-label="Next form">›</button>
-      )}
-    </div>
-  );
 
   const applyFiltersAndClose = () => {
     setFilter(pendingFilter);
@@ -247,14 +198,11 @@ export default function SpecimenArchive({ specimens, loadError }) {
   return (
     <>
       <PortalCanvas />
-      <SpecimenViewer
-        open={viewerOpen && Boolean(viewerAddress)}
-        title={modalTitle}
-        subtitle={specimenModal && [`SID ${specimenModal.sid}`, specimenModal.className].filter(Boolean).join(" · ")}
-        address={viewerAddress}
-        formControl={formPill}
-        details={view && <SpecimenDetails key={specimenModal.sid} view={view} legend={specimenModal.description} flat />}
-        onClose={() => setViewerOpen(false)}
+      <SpecimenDisplay
+        specimen={selected}
+        formIndex={formIndex}
+        onFormChange={changeForm}
+        onClose={closeDisplay}
       />
       <div className={styles.page}>
 
@@ -356,7 +304,7 @@ export default function SpecimenArchive({ specimens, loadError }) {
                   key={item.sid}
                   className={styles.card}
                   style={item.mugshot ? { backgroundImage: `url(${item.mugshot})` } : {}}
-                  onClick={() => openSpecimenModal(item)}
+                  onClick={() => openDisplay(item)}
                 >
                   <div className={styles.cardInfo}>
                     <h3 className={styles.cardName}>{item.name}</h3>
@@ -380,76 +328,6 @@ export default function SpecimenArchive({ specimens, loadError }) {
             </div>
           )}
         </div>
-
-        {/* ======================================================
-            SPECIMEN MODAL
-        ====================================================== */}
-        {specimenModal && (
-          <div className={styles.overlay} onClick={() => setSpecimenModal(null)}>
-            <div className={styles.specimenModal} onClick={(e) => e.stopPropagation()}>
-
-              {/* Hero */}
-              <div className={styles.modalHero} onTouchStart={onHeroTouchStart} onTouchEnd={onHeroTouchEnd}>
-                {specimenModal.forms?.[formIndex]?.image && (
-                  <>
-                    {/* Blurred copy fills the space around the uncropped image */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      className={styles.modalHeroBackdrop}
-                      src={specimenModal.forms[formIndex].image}
-                      alt=""
-                      aria-hidden="true"
-                    />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      className={styles.modalHeroImg}
-                      src={specimenModal.forms[formIndex].image}
-                      alt={modalTitle}
-                    />
-                  </>
-                )}
-
-                {/* Header overlay */}
-                <div className={styles.modalHeader}>
-                  <div className={styles.modalTitleBar}>
-                    <h2 className={styles.modalTitle}>{modalTitle}</h2>
-                    <p className={styles.modalSubtitle}>
-                      SID {specimenModal.sid}
-                      {specimenModal.className && (
-                        <> · <span className={styles.modalClassTag}>{specimenModal.className}</span></>
-                      )}
-                    </p>
-                  </div>
-                  <div className={styles.modalActions}>
-                    <button className={styles.iconBtn} title="Close" onClick={() => setSpecimenModal(null)}>✕</button>
-                  </div>
-                </div>
-
-                {/* Bottom bar over the image: View in 3D + compact form switcher */}
-                <div className={styles.heroBottom}>
-                  <button
-                    className={styles.ctaBtn}
-                    disabled={!viewerAddress}
-                    onClick={() => setViewerOpen(true)}
-                  >
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M10 2L17 6V14L10 18L3 14V6Z" />
-                      <path d="M3 6L10 10L17 6M10 10V18" />
-                    </svg>
-                    {viewerAddress ? "View in 3D" : "3D coming soon"}
-                  </button>
-
-                  {formPill}
-                </div>
-              </div>
-
-              {/* Its own scrolling column beside the image on desktop */}
-              <div className={styles.modalDetails}>
-                <SpecimenDetails key={specimenModal.sid} view={view} legend={specimenModal.description} />
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* ======================================================
             OWNER MODAL

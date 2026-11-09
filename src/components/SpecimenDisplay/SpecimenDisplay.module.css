@@ -1,0 +1,869 @@
+/* Hidden, not display:none: Unity needs a canvas with a real size even while nobody can see it */
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  visibility: hidden;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-main);
+}
+
+/* Above the navbar and the archive's modals */
+.stageOpen {
+  z-index: 300;
+  visibility: visible;
+}
+
+.canvasHost {
+  position: absolute;
+  inset: 0;
+}
+
+/* Wider screens: the canvas overhangs both sides by half the panel's space, so it can slide left
+   and put the specimen beside the panel without resizing Unity or exposing an edge. */
+@media (min-width: 768px) {
+  .canvasHost {
+    inset: 0 auto 0 -230px;
+    width: calc(100% + 460px);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .canvasHostShifted {
+    transform: translateX(-230px);
+  }
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  touch-action: none;
+}
+
+/* Mugshot for a form with no 3D model */
+.poster {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+}
+
+.posterImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.posterWithPanel {
+  bottom: 50dvh;
+}
+
+@media (min-width: 768px) {
+  .posterWithPanel {
+    bottom: 0;
+    right: 460px;
+  }
+}
+
+/* Lets drags reach the canvas, so the camera can orbit between the controls */
+.controls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.controls button,
+.controls select,
+.panel {
+  pointer-events: auto;
+}
+
+/* ============================================================
+   TOP BAR: back, name, form switcher
+   ============================================================ */
+.topBar {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.backBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(20, 16, 39, 0.82);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.backBtn:hover { background: rgba(50, 42, 84, 0.9); }
+
+/* A dark chip, so the name stays readable on bright maps */
+.titleBlock {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 4px 12px 5px;
+  border-radius: 12px;
+  background: rgba(20, 16, 39, 0.82);
+}
+
+.title {
+  margin: 0;
+  overflow: hidden;
+  font-size: 1.06rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subtitle {
+  margin: 1px 0 0;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.subtitleClass { text-transform: capitalize; }
+
+.formPill {
+  flex-shrink: 0;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(20, 16, 39, 0.82);
+}
+
+.formArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.formArrow:hover { background: rgba(255, 255, 255, 0.12); }
+
+.formInfo {
+  display: flex;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.formCount {
+  color: rgba(255, 255, 255, 0.68);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  position: absolute;
+  top: 72px;
+  left: 50%;
+  margin: 0;
+  padding: 10px 16px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  background: rgba(20, 16, 39, 0.82);
+  font-size: 0.875rem;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   LOADER: covers the whole screen, including Unity's splash
+   ============================================================ */
+.loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  background: #07050f;
+  transition: opacity 0.4s, visibility 0.4s;
+}
+
+.loaderDone {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loaderBack {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+}
+
+.loaderBody {
+  width: min(360px, 100%);
+  text-align: center;
+}
+
+.loaderTrack {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.loaderFill {
+  height: 100%;
+  border-radius: 3px;
+  background: #a58cf0;
+  transition: width 0.2s linear;
+}
+
+.loaderText {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.875rem;
+  letter-spacing: 0.3px;
+}
+
+.loaderPercent {
+  color: rgba(255, 255, 255, 0.68);
+  font-variant-numeric: tabular-nums;
+}
+
+.loaderFailed {
+  margin: 0 0 14px;
+  font-size: 0.9375rem;
+}
+
+.retryBtn {
+  min-height: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 10px;
+  background: #7c5fe6;
+  color: #fff;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+/* ============================================================
+   THE FOUR BUTTONS
+   ============================================================ */
+.panelButtons {
+  position: absolute;
+  right: 16px;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.panelButtonsHidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.panelButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fff;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.panelButtonLabel {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(20, 16, 39, 0.72);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.panelButtonIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(20, 16, 39, 0.86);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.panelButton:hover .panelButtonIcon {
+  background: rgba(60, 50, 104, 0.95);
+  transform: scale(1.05);
+}
+
+@media (min-width: 768px) {
+  .panelButtons {
+    right: 28px;
+    bottom: 28px;
+  }
+}
+
+/* ============================================================
+   GLASS PANEL: one shell, a floating sheet on phones and a column on wider screens
+   ============================================================ */
+.panel {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: calc(8px + env(safe-area-inset-bottom));
+  height: calc(50dvh - 8px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 28px;
+  /* Maps range from near black to near white, so the glass darkens what's behind it to keep white text readable */
+  background: linear-gradient(160deg, rgba(64, 60, 84, 0.6), rgba(24, 20, 40, 0.72));
+  -webkit-backdrop-filter: blur(36px) saturate(180%) brightness(0.55);
+  backdrop-filter: blur(36px) saturate(180%) brightness(0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 24px 60px rgba(0, 0, 0, 0.55);
+  transform: translateY(110%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s, visibility 0.2s;
+}
+
+@media (min-width: 768px) {
+  .panel {
+    left: auto;
+    right: 20px;
+    top: 84px;
+    bottom: 20px;
+    width: 420px;
+    height: auto;
+    transform: translateX(28px);
+  }
+}
+
+.panel.panelOpen {
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+}
+
+.panelTabs {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) 44px;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 8px 4px;
+}
+
+.panelTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 18px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.76);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.panelTab:hover { color: #fff; }
+
+.panelTabActive {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.panelClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.panelClose:hover { background: rgba(255, 255, 255, 0.22); }
+
+.panelBody {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding: 8px 12px 16px;
+  text-align: left;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.panelNote {
+  margin: 20px 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.section {
+  flex-shrink: 0;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.sectionTitle {
+  display: block;
+  margin: 0 0 10px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   OVERVIEW
+   ============================================================ */
+.legendBox { position: relative; }
+
+.legend {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.9375rem;
+  font-style: italic;
+  line-height: 1.55;
+}
+
+.legendMeasure {
+  position: absolute;
+  inset: 0 0 auto;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Three lines tall, with an empty float two lines high so the button lands at the end of line three */
+.legendClamped {
+  height: 4.65em;
+  overflow: hidden;
+}
+
+.legendClamped::before {
+  content: "";
+  float: right;
+  width: 0;
+  height: 3.1em;
+}
+
+.legendToggle {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #d9ceff;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: normal;
+  font-weight: 600;
+  line-height: inherit;
+  cursor: pointer;
+}
+
+.legendToggle:hover { text-decoration: underline; }
+
+.legendMore {
+  float: right;
+  clear: right;
+  margin-left: 2px;
+}
+
+.attrList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attrItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.attrLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.6875rem;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.attrValue {
+  color: #cfc1ff;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.statList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.statTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.statName {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.statValue {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.statTrack {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.statFill {
+  height: 100%;
+  border-radius: 3px;
+  background: #b7a2f5;
+  transition: width 0.5s ease;
+}
+
+.statDesc {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   CONTROL
+   ============================================================ */
+.mapLabel { display: block; }
+
+.mapSelectWrap {
+  position: relative;
+  display: block;
+}
+
+.mapSelect {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 40px 0 14px;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mapSelect option { color: #000; }
+.mapSelect:disabled { opacity: 0.6; cursor: progress; }
+
+.mapChevron {
+  position: absolute;
+  top: 15px;
+  right: 14px;
+  pointer-events: none;
+}
+
+.actionList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.actionRow:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); }
+
+.actionRow:disabled {
+  border-color: rgba(255, 255, 255, 0.06);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+.actionRowPlaying,
+.actionRow.actionRowPlaying:hover {
+  border-color: #b7a2f5;
+  background: rgba(124, 95, 230, 0.4);
+}
+
+.actionText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.actionName {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.actionType {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.6875rem;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.actionStatus {
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.actionStatusPlaying { color: #d9ceff; }
+
+/* ============================================================
+   METRICS
+   ============================================================ */
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 10px;
+}
+
+.metricLabel {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.75rem;
+}
+
+.metricValue {
+  margin-top: 2px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.metricSoon {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.metricNote {
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.formRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.formRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.875rem;
+}
+
+.formRowName { font-weight: 600; }
+
+.formRowTitle {
+  color: rgba(255, 255, 255, 0.74);
+  font-weight: 400;
+}
+
+.formRowCount {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   ABILITIES
+   ============================================================ */
+.abilityCard {
+  flex-shrink: 0;
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  font-family: inherit;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.abilityCardPlayable { cursor: pointer; }
+.abilityCardPlayable:hover { background: rgba(255, 255, 255, 0.11); }
+
+/* Darker while the ability plays */
+.abilityCard.abilityCardPlaying { background: rgba(0, 0, 0, 0.45); }
+
+.abilityTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.abilityBadge {
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.badgeStrike { background: rgba(194, 122, 58, 0.24); color: #f6c79c; }
+.badgeProjectile { background: rgba(194, 58, 58, 0.26); color: #f9b6b6; }
+.badgeDefense { background: rgba(58, 95, 194, 0.3); color: #bccdf9; }
+.badgeAlter { background: rgba(106, 58, 194, 0.3); color: #d3c0fb; }
+
+.abilityCost {
+  padding: 3px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.abilityName {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.abilityDesc {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.abilityStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.abilityStat { display: block; }
+
+.abilityStatLabel {
+  display: block;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.6875rem;
+  letter-spacing: 0.6px;
+}
+
+.abilityStatValue {
+  display: block;
+  margin-top: 1px;
+  font-size: 1rem;
+  font-weight: 700;
+}

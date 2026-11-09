@@ -1,6 +1,6 @@
 // The Specimen Archive's single Unity instance: started once per visit, paused while nobody is
 // watching, and shut down when the visitor leaves the page. Components read its state with
-// useUnityViewer (see components/SpecimenViewer) and never talk to Unity directly.
+// useUnityViewer (see components/SpecimenDisplay) and never talk to Unity directly.
 //
 // Unity reports everything through window events named "shadawi:<name>"
 // (Assets/Plugins/WebGL/ShadawiDisplay.jslib in the Unity project), so its "ready" event, not the
@@ -14,10 +14,15 @@ const BUILD_EXT = process.env.NEXT_PUBLIC_UNITY_BUILD_EXT || "";
 // The GameObject that holds SpecimenDisplayWebBridge
 const BRIDGE = "DisplayRuntime";
 
+// The Addressables catalog Unity reads after it starts. Unity sends no event for it, so the page
+// watches for the file itself to tell visitors when that step is done.
+const CATALOG_FILE = /\/catalog[^/]*\.(bin|json)/;
+
 const INITIAL_STATE = Object.freeze({
   status: "idle", // idle | loading | ready | error
   progress: 0, // 0 to 1, while status is "loading"
   error: null,
+  catalogLoaded: false,
   specimen: Object.freeze({ address: null, status: "none" }), // none | loading | loaded | failed
   actions: Object.freeze([]), // [{ id, type, looping, allowed }]
   playingId: null,
@@ -113,7 +118,16 @@ function listenToUnity() {
     window.addEventListener(`shadawi:${name}`, listener);
     return () => window.removeEventListener(`shadawi:${name}`, listener);
   });
-  return () => removers.forEach((remove) => remove());
+  const catalogWatcher = new PerformanceObserver((list) => {
+    if (!list.getEntries().some((entry) => CATALOG_FILE.test(entry.name))) return;
+    catalogWatcher.disconnect();
+    setState({ catalogLoaded: true });
+  });
+  catalogWatcher.observe({ type: "resource" });
+  return () => {
+    removers.forEach((remove) => remove());
+    catalogWatcher.disconnect();
+  };
 }
 
 function loadScript(src) {
@@ -181,7 +195,7 @@ export const unityViewer = {
     host.appendChild(canvas);
   },
 
-  /** Starts Unity if needed and loads a specimen in the background, ready for "View in 3D". */
+  /** Starts Unity if needed and loads a specimen. */
   preload(address) {
     if (address) wantedSpecimen = address;
     start();
