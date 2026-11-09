@@ -3,3 +3,6 @@ node_modules/
 .claude/
 .env*
 .next/
+
+# Unity WebGL build, copied from the Unity project for local testing
+/public/unity/

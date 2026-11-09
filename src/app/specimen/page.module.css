@@ -754,7 +754,14 @@
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.ctaBtn:hover {
+.ctaBtn:disabled {
+  opacity: 0.6;
+  box-shadow: none;
+  cursor: default;
+  transform: none;
+}
+
+.ctaBtn:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 10px 28px rgba(102, 126, 234, 0.5);
 }
@@ -875,6 +882,13 @@
   background: rgba(214, 208, 240, 0.62);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+}
+
+/* In the viewer's panel there's no image above to overlap */
+.modalTabsFlat {
+  margin-top: 0;
+  border-width: 0 0 1px;
+  border-radius: 0;
 }
 
 .modalTab {

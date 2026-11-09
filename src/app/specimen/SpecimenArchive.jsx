@@ -2,27 +2,21 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import PortalCanvas from "@/components/PortalCanvas/PortalCanvas";
+import SpecimenViewer from "@/components/SpecimenViewer/SpecimenViewer";
+import { unityViewer } from "@/lib/unityViewer";
+import SpecimenDetails from "./SpecimenDetails";
 import { formStageName, specimenFormTitle } from "@/lib/specimenForms";
 import styles from "./page.module.css";
 
 // ============================================================
-// SAMPLE DATA: owners are still placeholders.
-// Specimens come from the content server (see page.jsx).
+// Specimens come from the content server (see page.jsx). Nobody owns a kin until they're minted,
+// so the Kin and Owners tabs show their empty messages for now.
 // ============================================================
 
 // Kin are the individual minted specimen. None are minted yet, so this tab shows its empty message.
 const KIN = [];
 
-const OWNERS = [
-  { username: "oneiric", name: "Oneiric", handle: "oneiric.shdw", title: "Founding Architect", profileImage: "https://i.pravatar.cc/150?img=12", worldRank: 1, specimenOwned: 247, kinOwned: 89, bio: "Founding architect of the Shadawi Universe. Forged the first six clans and still walks among them under different names.", recentCollection: ["/images/specimen-temp/domigra.png", "/images/specimen-temp/mightybird.png", "/images/specimen-temp/cloudogre.png", "/images/specimen-temp/seapuk.png"] },
-  { username: "stormwalker", name: "Storm Walker", handle: "storm.w", title: "Elite Purgator", profileImage: "https://i.pravatar.cc/150?img=33", worldRank: 2, specimenOwned: 198, kinOwned: 64, bio: "Veteran of 312 Purg cycles. Commands a tempest aviary and prefers Divine and Elemental specimens.", recentCollection: ["/images/specimen-temp/mightybird.png", "/images/specimen-temp/cloudogre.png"] },
-  { username: "verdant", name: "Verdant", handle: "verdant.eth", title: "Plant Cultivator", profileImage: "https://i.pravatar.cc/150?img=47", worldRank: 3, specimenOwned: 156, kinOwned: 41, bio: "Caretaker of the Last Greenhouse. Specializes in Plant-class specimens and root-bound tokens.", recentCollection: ["/images/specimen-temp/mightybird.png"] },
-  { username: "bonewright", name: "Bonewright", handle: "bonewright", title: "Necro Engineer", profileImage: "https://i.pravatar.cc/150?img=68", worldRank: 4, specimenOwned: 142, kinOwned: 73, bio: "Reverse-engineers the Undead. Holds the largest known cache of Bone Sigil tokens.", recentCollection: ["/images/specimen-temp/domigra.png", "/images/specimen-temp/cloudogre.png"] },
-  { username: "kira_05", name: "Kira", handle: "kira.05", title: "Token Trader", profileImage: "https://i.pravatar.cc/150?img=25", worldRank: 5, specimenOwned: 88, kinOwned: 412, bio: "Doesn't fight. Doesn't summon. Just trades — and holds the deepest token vault on this side of the Purg.", recentCollection: ["/images/specimen-temp/seapuk.png"] },
-  { username: "fenric", name: "Fenric", handle: "fenric.gx", title: "Beast Tamer", profileImage: "https://i.pravatar.cc/150?img=51", worldRank: 6, specimenOwned: 76, kinOwned: 22, bio: "Walks the outer wilds. Bonded to a pack of three Beast-class specimens since cycle 14.", recentCollection: ["/images/specimen-temp/mightybird.png"] },
-  { username: "mira_void", name: "Mira Void", handle: "mira.void", title: "Quantum Adept", profileImage: "https://i.pravatar.cc/150?img=44", worldRank: 7, specimenOwned: 64, kinOwned: 38, bio: "Reads the gaps between cycles. Quantum discipline only.", recentCollection: ["/images/specimen-temp/cloudogre.png"] },
-  { username: "newpurg42", name: "newpurg42", handle: "newpurg42", title: "Apprentice", profileImage: "https://i.pravatar.cc/150?img=8", worldRank: 248, specimenOwned: 3, kinOwned: 1, bio: "Just started. Saving up for a second specimen.", recentCollection: ["/images/specimen-temp/seapuk.png"] },
-];
+const OWNERS = [];
 
 const SPECIMEN_FILTER_CONFIGS = [
   { key: "Class", label: "Class", options: ["divine", "elemental", "gas", "undead", "humanoid", "plant", "beast", "fairy"] },
@@ -75,11 +69,6 @@ function applyOwnerSort(items, order) {
   return sorted;
 }
 
-function badgeClass(type) {
-  const map = { strike: styles.badgeStrike, projectile: styles.badgeProjectile, barrier: styles.badgeDefense, defense: styles.badgeDefense, alter: styles.badgeAlter };
-  return map[type] || styles.badgeStrike;
-}
-
 // ============================================================
 // MAIN COMPONENT
 // ============================================================
@@ -96,11 +85,11 @@ export default function SpecimenArchive({ specimens, loadError }) {
   // Modals
   const [specimenModal, setSpecimenModal] = useState(null);
   const [ownerModal, setOwnerModal]       = useState(null);
+  const [viewerOpen, setViewerOpen]       = useState(false);
   const [filtersOpen, setFiltersOpen]     = useState(false);
 
   // Inside specimen modal
   const [formIndex, setFormIndex]   = useState(0);
-  const [modalTab, setModalTab]     = useState("overview");
 
   // Sticky filter bar detection
   const [stuck, setStuck] = useState(false);
@@ -137,6 +126,11 @@ export default function SpecimenArchive({ specimens, loadError }) {
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
+        // The viewer sits on top of the card, so Escape only goes back one step
+        if (viewerOpen) {
+          setViewerOpen(false);
+          return;
+        }
         setSpecimenModal(null);
         setOwnerModal(null);
         setFiltersOpen(false);
@@ -144,7 +138,7 @@ export default function SpecimenArchive({ specimens, loadError }) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [viewerOpen]);
 
   // Lock body scroll when any modal is open
   useEffect(() => {
@@ -180,12 +174,22 @@ export default function SpecimenArchive({ specimens, loadError }) {
   const openSpecimenModal = (item) => {
     setSpecimenModal(item);
     setFormIndex(item.currentForm || 0);
-    setModalTab("overview");
   };
 
   // The modal shows the selected form's own details
   const view = specimenModal ? { ...specimenModal, ...specimenModal.forms?.[formIndex] } : null;
   const modalTitle = view && (view.title ?? specimenFormTitle(specimenModal.name, formIndex));
+  const viewerAddress = view?.webDisplay ?? null;
+
+  // Clicking a card shows interest, so start Unity behind it once the browser is free. By the
+  // time the visitor presses "View in 3D" the viewer and this specimen are often already loaded.
+  useEffect(() => {
+    if (!viewerAddress) return;
+    const startSoon = window.requestIdleCallback ?? ((run) => setTimeout(run, 200));
+    const cancel = window.cancelIdleCallback ?? clearTimeout;
+    const handle = startSoon(() => unityViewer.preload(viewerAddress));
+    return () => cancel(handle);
+  }, [viewerAddress]);
 
   // Step through forms, wrapping around at either end
   const formCount = specimenModal?.forms?.length || 0;
@@ -203,6 +207,22 @@ export default function SpecimenArchive({ specimens, loadError }) {
     swipeStartX.current = null;
     if (Math.abs(dx) > 40) changeForm(dx < 0 ? 1 : -1);
   };
+
+  // Forms are chosen from the same control on the card and in the viewer
+  const formPill = formCount > 0 && (
+    <div className={styles.formPill} role="group" aria-label="Specimen form">
+      {formCount > 1 && (
+        <button className={styles.formPillArrow} onClick={() => changeForm(-1)} aria-label="Previous form">‹</button>
+      )}
+      <span className={styles.formPillInfo} aria-live="polite">
+        <span className={styles.formPillName}>{formStageName(formIndex)}</span>
+        <span className={styles.formPillCount}>{formIndex + 1}/{formCount}</span>
+      </span>
+      {formCount > 1 && (
+        <button className={styles.formPillArrow} onClick={() => changeForm(1)} aria-label="Next form">›</button>
+      )}
+    </div>
+  );
 
   const applyFiltersAndClose = () => {
     setFilter(pendingFilter);
@@ -227,6 +247,15 @@ export default function SpecimenArchive({ specimens, loadError }) {
   return (
     <>
       <PortalCanvas />
+      <SpecimenViewer
+        open={viewerOpen && Boolean(viewerAddress)}
+        title={modalTitle}
+        subtitle={specimenModal && [`SID ${specimenModal.sid}`, specimenModal.className].filter(Boolean).join(" · ")}
+        address={viewerAddress}
+        formControl={formPill}
+        details={view && <SpecimenDetails key={specimenModal.sid} view={view} legend={specimenModal.description} flat />}
+        onClose={() => setViewerOpen(false)}
+      />
       <div className={styles.page}>
 
         {/* Header — compact so the cards show up sooner */}
@@ -261,8 +290,8 @@ export default function SpecimenArchive({ specimens, loadError }) {
                 </button>
               ))}
             </div>
-            {/* Nothing to search or filter until kin exist */}
-            {activeTab !== "kin" && (
+            {/* Nothing to search or filter until kin and owners exist */}
+            {activeTab === "specimen" && (
             <div className={styles.searchRow}>
               <div className={styles.searchWrap}>
                 <svg className={styles.searchIcon} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
@@ -297,6 +326,8 @@ export default function SpecimenArchive({ specimens, loadError }) {
             <p className={styles.noData}>
               {activeTab === "kin"
                 ? "No kin discovered at this time"
+                : activeTab === "owners"
+                ? "No owners at this time"
                 : activeTab === "specimen" && loadError
                   ? "THE ARCHIVE IS UNREACHABLE. TRY AGAIN SOON."
                   : "NO RESULTS FOUND"}
@@ -396,148 +427,23 @@ export default function SpecimenArchive({ specimens, loadError }) {
 
                 {/* Bottom bar over the image: View in 3D + compact form switcher */}
                 <div className={styles.heroBottom}>
-                  <button className={styles.ctaBtn}>
+                  <button
+                    className={styles.ctaBtn}
+                    disabled={!viewerAddress}
+                    onClick={() => setViewerOpen(true)}
+                  >
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" aria-hidden="true">
                       <path d="M10 2L17 6V14L10 18L3 14V6Z" />
                       <path d="M3 6L10 10L17 6M10 10V18" />
                     </svg>
-                    View in 3D
+                    {viewerAddress ? "View in 3D" : "3D coming soon"}
                   </button>
 
-                  {formCount > 0 && (
-                    <div className={styles.formPill} role="group" aria-label="Specimen form">
-                      {formCount > 1 && (
-                        <button className={styles.formPillArrow} onClick={() => changeForm(-1)} aria-label="Previous form">‹</button>
-                      )}
-                      <span className={styles.formPillInfo} aria-live="polite">
-                        <span className={styles.formPillName}>{formStageName(formIndex)}</span>
-                        <span className={styles.formPillCount}>{formIndex + 1}/{formCount}</span>
-                      </span>
-                      {formCount > 1 && (
-                        <button className={styles.formPillArrow} onClick={() => changeForm(1)} aria-label="Next form">›</button>
-                      )}
-                    </div>
-                  )}
+                  {formPill}
                 </div>
               </div>
 
-              {/* Modal tabs */}
-              <div className={styles.modalTabs}>
-                {["overview", "abilities", "metrics"].map((t) => (
-                  <button
-                    key={t}
-                    className={`${styles.modalTab}${modalTab === t ? " " + styles.modalTabActive : ""}`}
-                    onClick={() => setModalTab(t)}
-                  >
-                    {t.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-
-              {/* Tab panels */}
-              <div className={styles.modalBody}>
-
-                {/* OVERVIEW */}
-                {modalTab === "overview" && (
-                  <>
-                    {specimenModal.description && (
-                      <div className={styles.modalSection}>
-                        <h3 className={styles.modalSectionTitle}>LEGEND</h3>
-                        <p className={styles.legend}>{specimenModal.description}</p>
-                      </div>
-                    )}
-                    {view.attributes?.length > 0 && (
-                      <div className={styles.modalSection}>
-                        <h3 className={styles.modalSectionTitle}>ATTRIBUTES</h3>
-                        <ul className={styles.attrList}>
-                          {view.attributes.map((a) => (
-                            <li key={a.name} className={styles.attrItem}>
-                              <span className={styles.attrLabel}>{a.name}</span>
-                              <span className={styles.attrValue}>{a.value}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {view.stats?.length > 0 && (
-                      <div className={styles.modalSection}>
-                        <h3 className={styles.modalSectionTitle}>STATS</h3>
-                        <div className={styles.statBars}>
-                          {view.stats.map((s) => (
-                            <div key={s.name} className={styles.statRow}>
-                              <span className={styles.statName} title={s.description}>{s.name}</span>
-                              {/* A stat with no maximum (weight) is just a number, so its bar column stays empty */}
-                              {s.max ? (
-                                <div className={styles.statTrack}>
-                                  <div className={styles.statFill} style={{ width: `${Math.min(100, (s.value / s.max) * 100)}%` }} />
-                                </div>
-                              ) : <span />}
-                              <span className={styles.statVal}>
-                                {s.max ? `${s.value.toLocaleString()} / ${s.max.toLocaleString()}` : s.value.toLocaleString()}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {/* ABILITIES */}
-                {modalTab === "abilities" && (
-                  <div className={styles.abilitiesList}>
-                    {!view.abilities?.length && (
-                      <p className={styles.noData} style={{ margin: "20px 0" }}>No abilities listed.</p>
-                    )}
-                    {view.abilities?.map((ab) => (
-                      <div key={ab.name} className={styles.abilityCard}>
-                        <div className={styles.abilityTop}>
-                          <div className={styles.abilityInfo}>
-                            <span className={`${styles.abilityBadge} ${badgeClass(ab.type)}`}>{ab.type}</span>
-                            <p className={styles.abilityName}>{ab.name}</p>
-                            <p className={styles.abilityDesc}>{ab.description}</p>
-                          </div>
-                          <span className={styles.abilityCost}>
-                            {ab.cost?.value} {ab.cost?.type?.toUpperCase()}
-                          </span>
-                        </div>
-                        {/* Each ability category has its own stats (strike: DMG/FORCE/RANGE, barrier: BARRIER HP, …) */}
-                        <div className={styles.abilityStats}>
-                          {ab.stats?.map((st) => (
-                            <div key={st.label} className={styles.abilityStat}>
-                              <span className={styles.asLabel}>{st.label}</span>
-                              <span className={styles.asValue}>{st.value ?? "—"}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* METRICS */}
-                {modalTab === "metrics" && (
-                  view.metrics?.groups ? (
-                    <div className={styles.metricsContent}>
-                      {view.metrics.groups.map((group) => (
-                        <div key={group.title} className={styles.metricsGroup}>
-                          <h4 className={styles.metricsGroupTitle}>{group.title}</h4>
-                          <div className={styles.metricsGrid}>
-                            {group.items.map((item) => (
-                              <div key={item.label} className={styles.metricItem}>
-                                <span className={styles.mLabel}>{item.label}</span>
-                                <span className={styles.mValue}>{item.value?.toLocaleString()}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className={styles.noData} style={{ margin: "20px 0" }}>No metrics available.</p>
-                  )
-                )}
-              </div>
+              <SpecimenDetails key={specimenModal.sid} view={view} legend={specimenModal.description} />
             </div>
           </div>
         )}
