@@ -594,24 +594,48 @@
   position: relative;
   width: 100%;
   max-width: 640px;
-  max-height: 100vh;
-  background: rgba(195, 188, 230, 0.42);
-  backdrop-filter: blur(40px);
-  border: 1px solid rgba(255,255,255,0.28);
+  height: 100dvh; /* a fixed height, so switching tabs doesn't resize the modal */
+  background: #141027;
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 0;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   animation: slideUp 0.35s ease;
-  color: #1a1a2e;
+  color: #fff;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.25) transparent;
 }
 
 @media (min-width: 768px) {
   .specimenModal {
     border-radius: 16px;
-    max-height: calc(100vh - 48px);
+    height: min(860px, calc(100dvh - 48px));
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+}
+
+.modalDetails {
+  flex: 1 0 auto;
+}
+
+/* Wide screens: image on the left, details on the right, so stats show without scrolling */
+@media (min-width: 900px) {
+  .specimenModal {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    max-width: 1040px;
+    height: min(720px, calc(100dvh - 48px));
+    overflow: hidden;
+  }
+
+  .modalDetails {
+    min-height: 0;
+    overflow-y: auto;
+    border-left: 1px solid rgba(255,255,255,0.08);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.25) transparent;
   }
 }
 
@@ -636,7 +660,12 @@
   .modalHero {
     aspect-ratio: auto;
     height: min(500px, 58vh);
+    container-type: size;
   }
+}
+
+@media (min-width: 900px) {
+  .modalHero { height: 100%; }
 }
 
 /* Blurred, darkened copy of the image fills any leftover space */
@@ -646,7 +675,7 @@
   width: calc(100% + 80px);
   height: calc(100% + 80px);
   object-fit: cover;
-  filter: blur(28px) brightness(0.6);
+  filter: blur(28px) brightness(0.5);
   pointer-events: none;
 }
 
@@ -658,6 +687,35 @@
   height: 100%;
   object-fit: contain;
   pointer-events: none;
+}
+
+/* The hero isn't square here, so shrink the box to the square mugshot and fade the edges that
+   meet the backdrop. Otherwise the two meet in a hard line. Edges at the hero's own border
+   stay sharp, so nothing that reaches them gets dimmed. */
+@media (min-width: 768px) {
+  .modalHeroBackdrop { filter: blur(28px) brightness(0.42); }
+
+  .modalHeroImg {
+    margin: auto;
+    width: min(100cqw, 100cqh);
+    height: min(100cqw, 100cqh);
+  }
+
+  /* Hero wider than tall: backdrop shows left and right */
+  @container (min-aspect-ratio: 1/1) {
+    .modalHeroImg {
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+      mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    }
+  }
+
+  /* Hero taller than wide: backdrop shows above and below */
+  @container (max-aspect-ratio: 1/1) {
+    .modalHeroImg {
+      -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+      mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+    }
+  }
 }
 
 /* Dark fades top and bottom so the title and form switcher stay readable */
@@ -731,6 +789,10 @@
   justify-content: space-between;
   gap: 10px;
   padding: 0 16px 34px; /* leaves room for the tab bar tucking over the image */
+}
+
+@media (min-width: 900px) {
+  .heroBottom { padding-bottom: 20px; }
 }
 
 .ctaBtn {
@@ -870,18 +932,17 @@
 /* Modal tabs */
 /* Rounded "sheet" top that tucks over the bottom of the image */
 .modalTabs {
-  position: relative;
+  position: sticky; /* stays reachable while the details scroll */
+  top: 0;
   z-index: 3;
   display: flex;
   flex-shrink: 0; /* overflow:hidden would otherwise let the scrolling modal squash it */
   margin-top: -18px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.35);
-  border-bottom-color: rgba(255,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-bottom-color: rgba(255,255,255,0.08);
   border-radius: 18px 18px 0 0;
-  background: rgba(214, 208, 240, 0.62);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #1a1533;
 }
 
 /* In the viewer's panel there's no image above to overlap */
@@ -891,13 +952,22 @@
   border-radius: 0;
 }
 
+/* Same in the desktop modal, where the image sits beside the tabs */
+@media (min-width: 900px) {
+  .modalTabs {
+    margin-top: 0;
+    border-width: 0 0 1px;
+    border-radius: 0;
+  }
+}
+
 .modalTab {
   flex: 1;
   padding: 14px 0;
   border: none;
   border-bottom: 2px solid transparent;
   background: none;
-  color: rgba(0,0,0,0.38);
+  color: rgba(255,255,255,0.6);
   font-family: var(--font-main);
   font-size: 0.78rem;
   font-weight: bold;
@@ -906,33 +976,35 @@
   transition: color 0.2s, border-color 0.2s;
 }
 
-.modalTab:hover:not(.modalTabActive) { color: rgba(0,0,0,0.6); }
+.modalTab:hover:not(.modalTabActive) { color: rgba(255,255,255,0.85); }
 
 .modalTabActive {
-  color: #1a1a2e;
-  border-bottom-color: #764ba2;
+  color: #fff;
+  border-bottom-color: #a58cf0;
 }
 
 /* Modal body */
 .modalBody {
   padding: 16px 18px 32px;
-  color: #222;
+  color: rgba(255,255,255,0.85);
   text-align: left;
 }
+
+.modalBody .noData { opacity: 0.7; }
 
 .modalSection {
   margin-bottom: 16px;
   padding: 14px 16px;
-  background: rgba(255,255,255,0.42);
+  background: rgba(255,255,255,0.04);
   border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 .modalSectionTitle {
   font-size: 0.75rem;
   letter-spacing: 2px;
   font-weight: bold;
-  color: #111;
+  color: rgba(255,255,255,0.72);
   margin: 0 0 10px;
 }
 
@@ -940,9 +1012,9 @@
 .legend {
   margin: 0;
   padding-left: 14px;
-  border-left: 3px solid #764ba2;
+  border-left: 3px solid #7c5fe6;
   font-style: italic;
-  color: #333;
+  color: rgba(255,255,255,0.85);
   line-height: 1.6;
   font-size: 0.88rem;
 }
@@ -953,15 +1025,15 @@
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
 .attrItem {
-  background: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.05);
   padding: 9px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.06);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -970,13 +1042,13 @@
 .attrLabel {
   font-size: 0.62rem;
   letter-spacing: 1px;
-  opacity: 0.5;
+  color: rgba(255,255,255,0.62);
   text-transform: uppercase;
 }
 
 .attrValue {
   font-weight: bold;
-  color: #5a3da0;
+  color: #c2b0ff;
   font-size: 0.92rem;
   text-transform: capitalize;
 }
@@ -995,13 +1067,13 @@
   font-size: 0.72rem;
   font-weight: bold;
   letter-spacing: 1px;
-  color: #333;
+  color: rgba(255,255,255,0.78);
   text-transform: capitalize;
 }
 
 .statTrack {
   height: 7px;
-  background: rgba(0,0,0,0.1);
+  background: rgba(255,255,255,0.1);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -1009,14 +1081,14 @@
 .statFill {
   height: 100%;
   border-radius: 4px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: linear-gradient(90deg, #667eea, #a58cf0);
   transition: width 0.5s ease;
 }
 
 .statVal {
   font-size: 0.78rem;
   font-weight: bold;
-  color: #333;
+  color: #fff;
   text-align: right;
 }
 
@@ -1026,8 +1098,8 @@
 .abilitiesList { display: flex; flex-direction: column; gap: 12px; }
 
 .abilityCard {
-  background: rgba(255,255,255,0.42);
-  border: 1px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px;
   padding: 14px 16px;
 }
@@ -1039,7 +1111,7 @@
   gap: 10px;
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(100,100,100,0.18);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .abilityInfo { flex: 1; min-width: 0; }
@@ -1064,14 +1136,14 @@
 .abilityName {
   font-size: 1.05rem;
   font-weight: bold;
-  color: #111;
+  color: #fff;
   margin: 4px 0 2px;
   letter-spacing: 1px;
 }
 
 .abilityDesc {
   font-size: 0.78rem;
-  color: #444;
+  color: rgba(255,255,255,0.72);
   line-height: 1.45;
   margin: 0;
 }
@@ -1081,12 +1153,12 @@
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
-  border: 1px solid rgba(0,0,0,0.12);
+  border: 1px solid rgba(255,255,255,0.16);
   border-radius: 8px;
   font-size: 0.72rem;
   font-weight: bold;
-  color: #333;
-  background: rgba(255,255,255,0.5);
+  color: #fff;
+  background: rgba(255,255,255,0.06);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -1103,14 +1175,14 @@
 .asLabel {
   font-size: 0.6rem;
   letter-spacing: 1px;
-  color: #666;
+  color: rgba(255,255,255,0.62);
   display: block;
 }
 
 .asValue {
   font-size: 1.1rem;
   font-weight: bold;
-  color: #111;
+  color: #fff;
 }
 
 .asValueSpecial { color: #c23a3a; }
@@ -1121,8 +1193,8 @@
 .metricsContent { display: flex; flex-direction: column; gap: 14px; }
 
 .metricsGroup {
-  background: rgba(255,255,255,0.42);
-  border: 1px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px;
   padding: 14px 16px;
 }
@@ -1130,10 +1202,10 @@
 .metricsGroupTitle {
   font-size: 0.7rem;
   letter-spacing: 2px;
-  color: #555;
+  color: rgba(255,255,255,0.72);
   margin: 0 0 10px;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   text-transform: uppercase;
 }
 
@@ -1148,14 +1220,14 @@
 .mLabel {
   font-size: 0.62rem;
   letter-spacing: 1px;
-  color: #777;
+  color: rgba(255,255,255,0.62);
   text-transform: uppercase;
 }
 
 .mValue {
   font-size: 1rem;
   font-weight: bold;
-  color: #1a1a2e;
+  color: #fff;
 }
 
 .mValueAccent { color: #764ba2; }

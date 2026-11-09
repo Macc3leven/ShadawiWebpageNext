@@ -187,12 +187,18 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 16px;
-  background: rgba(214, 208, 240, 0.86); /* more solid than the card modal: the scene behind it is often black */
+  background: rgba(20, 16, 39, 0.92);
   backdrop-filter: blur(40px);
 }
-.panelBody { flex: 1; min-height: 0; overflow-y: auto; }
+.panelBody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
 .sheetHandle { display: none; }
 
 .srOnly {
@@ -239,14 +245,14 @@
     padding: 8px 0 0;
     border: none;
     background: none;
-    color: #1a1a2e;
+    color: #fff;
     font-family: inherit;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 1px;
     cursor: pointer;
   }
-  .sheetGrip { width: 36px; height: 4px; border-radius: 2px; background: rgba(26, 26, 46, 0.45); }
+  .sheetGrip { width: 36px; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.45); }
 
   /* The action bar rides above the open sheet */
   .actionBarRaised { bottom: calc(62dvh + 10px); }

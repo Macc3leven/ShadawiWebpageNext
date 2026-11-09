@@ -443,7 +443,10 @@ export default function SpecimenArchive({ specimens, loadError }) {
                 </div>
               </div>
 
-              <SpecimenDetails key={specimenModal.sid} view={view} legend={specimenModal.description} />
+              {/* Its own scrolling column beside the image on desktop */}
+              <div className={styles.modalDetails}>
+                <SpecimenDetails key={specimenModal.sid} view={view} legend={specimenModal.description} />
+              </div>
             </div>
           </div>
         )}
