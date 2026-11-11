@@ -404,6 +404,23 @@
   transform: scale(1.04);
 }
 
+/* Top-right corner badge ("2 Forms"): square on the card's cut-corner shape, clear of the name plate */
+.cardForms {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(18, 12, 35, 0.85);
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Name plate: the SID big on the left, the name and class beside it, all aligned from the left */
 .cardInfo {
   position: absolute;
   width: 94%;
@@ -413,23 +430,43 @@
   transform: translateX(-50%);
   background: rgba(18, 12, 35, 0.92);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
   align-items: center;
+  gap: 10px;
   border-radius: 4px;
   clip-path: polygon(15% 0, 100% 0, 100% 42%, 85% 100%, 0 100%, 0 0);
-  padding: 0 8px;
+  padding: 0 10px 0 14px;
 }
 
+.cardSid {
+  flex: none;
+  font-size: clamp(18px, 2.2vw, 28px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+/* min-width 0 lets this column shrink below its text's width, so a long name can scroll */
+.cardText {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: left;
+}
+
+.cardNameBox {
+  overflow: hidden;
+}
+
+/* ScrollingName animates this with transform when the name is wider than the plate */
 .cardName {
+  display: inline-block;
   font-size: 12px;
   font-weight: bold;
   margin: 0;
   letter-spacing: 1px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
 }
 
 .cardClass {
@@ -438,6 +475,7 @@
   opacity: 0.65;
   letter-spacing: 1px;
   text-transform: uppercase;
+  text-align: left;
 }
 
 /* ============================================================

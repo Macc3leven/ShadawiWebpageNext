@@ -4,5 +4,6 @@ node_modules/
 .env*
 .next/
 
-# Unity WebGL build, copied from the Unity project for local testing
-/public/unity/
+# Unity WebGL build, copied from the Unity project. The production build (WebGL-prod.*) is committed
+# so Vercel can serve it; the development build is large and only for local testing.
+/public/unity/Build/WebGL-dev.*

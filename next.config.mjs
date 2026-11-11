@@ -22,6 +22,25 @@ const nextConfig = {
     ];
   },
 
+  // Unity's Gzip build ships .gz files that the browser must decompress itself, so each one has to be
+  // served with "Content-Encoding: gzip" and the type of the file inside (not application/gzip).
+  // Without this Unity stops at "Opening Unity…" with "Unable to parse …framework.js.gz".
+  // Applies to public/unity/Build on Vercel too. A build with compression turned off doesn't need it.
+  async headers() {
+    const gzipped = (extension, contentType) => ({
+      source: `/unity/Build/:file(.+\\.${extension}\\.gz)`,
+      headers: [
+        { key: "Content-Encoding", value: "gzip" },
+        { key: "Content-Type", value: contentType },
+      ],
+    });
+    return [
+      gzipped("js", "application/javascript"),
+      gzipped("wasm", "application/wasm"),
+      gzipped("data", "application/octet-stream"),
+    ];
+  },
+
   webpack(config) {
     // wagmi's connector barrel exports every connector, including experimental
     // ones we don't use. Stub out their missing peer deps so the build doesn't fail.

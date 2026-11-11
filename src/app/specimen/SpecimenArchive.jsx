@@ -70,6 +70,58 @@ function applyOwnerSort(items, order) {
 // MAIN COMPONENT
 // ============================================================
 
+const NAME_PAUSE_MS = 1000; // how long a long name rests at each end
+const NAME_SCROLL_PX_PER_SECOND = 30;
+
+// A card name that fits is plain text. One that doesn't rests for a second, scrolls left until its
+// end shows, rests again, and scrolls back, like a banner. Skipped when the visitor prefers less motion.
+function ScrollingName({ text }) {
+  const boxRef = useRef(null);
+  const labelRef = useRef(null);
+
+  useEffect(() => {
+    const box = boxRef.current;
+    const label = labelRef.current;
+    if (!box || !label) return undefined;
+
+    let animation = null;
+    const update = () => {
+      animation?.cancel();
+      animation = null;
+      const overflow = label.scrollWidth - box.clientWidth;
+      if (overflow <= 1 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      // Each run holds half the pause at both ends; the return run adds the rest, so a rest lasts one pause
+      const travelMs = (overflow / NAME_SCROLL_PX_PER_SECOND) * 1000;
+      const duration = travelMs + NAME_PAUSE_MS;
+      const hold = NAME_PAUSE_MS / 2 / duration;
+      animation = label.animate(
+        [
+          { transform: "translateX(0)", offset: 0 },
+          { transform: "translateX(0)", offset: hold },
+          { transform: `translateX(-${overflow}px)`, offset: 1 - hold },
+          { transform: `translateX(-${overflow}px)`, offset: 1 },
+        ],
+        { duration, delay: NAME_PAUSE_MS / 2, iterations: Infinity, direction: "alternate", easing: "linear" }
+      );
+    };
+
+    update();
+    const observer = new ResizeObserver(update); // the card width changes with the window
+    observer.observe(box);
+    return () => {
+      observer.disconnect();
+      animation?.cancel();
+    };
+  }, [text]);
+
+  return (
+    <div ref={boxRef} className={styles.cardNameBox}>
+      <h3 ref={labelRef} className={styles.cardName}>{text}</h3>
+    </div>
+  );
+}
+
 // specimens: the catalog from the content server (lib/contentServer.js); loadError: it couldn't be reached
 export default function SpecimenArchive({ specimens, loadError }) {
   const [activeTab, setActiveTab]         = useState("specimen");
@@ -306,9 +358,14 @@ export default function SpecimenArchive({ specimens, loadError }) {
                   style={item.mugshot ? { backgroundImage: `url(${item.mugshot})` } : {}}
                   onClick={() => openDisplay(item)}
                 >
+                  {/* Only specimens with more than one form say so; tokens have no forms */}
+                  {item.forms?.length > 1 && <span className={styles.cardForms}>{item.forms.length} Forms</span>}
                   <div className={styles.cardInfo}>
-                    <h3 className={styles.cardName}>{item.name}</h3>
-                    <p className={styles.cardClass}>{item.className}</p>
+                    <span className={styles.cardSid}>{item.sid}</span>
+                    <div className={styles.cardText}>
+                      <ScrollingName text={item.name} />
+                      <p className={styles.cardClass}>{item.className}</p>
+                    </div>
                   </div>
                 </div>
               ))}
